@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  imports: [RouterModule]
 })
-export class AppComponent {
-  title = 'frontend';
+export class AppComponent implements OnInit {
+  constructor(private http: HttpClient) {}
+  title = 'Resolve Já';
+
+  ngOnInit() {
+    this.http.get('http://localhost:5000/auth/protected').subscribe(
+      (response) => console.log('Sucesso:', response),
+      (error) => console.log('Erro:', error)
+    );
+  }
 }
