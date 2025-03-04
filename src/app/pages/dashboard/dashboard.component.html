@@ -1,2 +1,45 @@
-<button (click)="logout()">Logout</button>
-<h1>LOGADO</h1>
+<div class="dashboard-container">
+    <button (click)="logout()">Logout</button>
+    <h1>Dashboard</h1>
+
+    <h2>Denúncias</h2>
+
+    <div class="filters">
+      <label for="status">Status:</label>
+      <select id="status" [(ngModel)]="selectedStatus" (change)="filtrarDenuncias()">
+        <option value="">Todos</option>
+        <option value="pendente">Pendente</option>
+        <option value="em andamento">Em Andamento</option>
+        <option value="resolvido">Resolvido</option>
+      </select>
+      
+      <label for="tipo">Tipo:</label>
+      <select id="tipo" [(ngModel)]="selectedTipo" (change)="filtrarDenuncias()">
+        <option value="">Todos</option>
+        <option value="buraco">Buraco</option>
+        <option value="iluminacao">Iluminação</option>
+        <option value="lixo">Lixo</option>
+      </select>
+    </div>
+
+    <button (click)="novaDenuncia()" class="nova-denuncia-btn">+ Nova Denúncia</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Tipo</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let denuncia of denunciasFiltradas">
+          <td>{{ denuncia.id }}</td>
+          <td>{{ denuncia.titulo }}</td>
+          <td>{{ denuncia.tipo }}</td>
+          <td>{{ denuncia.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

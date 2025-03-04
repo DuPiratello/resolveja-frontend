@@ -1,23 +1,31 @@
 <div class="login-container">
-    <h2>Login</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label>Email:</label>
-        <input type="email" formControlName="email" placeholder="Digite seu email" required />
-        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-            Email inválido.
-          </div>
+  <h2>Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Email:</label>
+      <input type="email" formControlName="email" placeholder="Digite seu email" required />
+      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          Email inválido.
       </div>
-  
-      <div>
-        <label>Senha:</label>
-        <input type="password" formControlName="password" placeholder="Digite sua senha" required />
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            A senha deve ter pelo menos 6 caracteres.
-          </div>
+    </div>
+
+    <div>
+      <label>Senha:</label>
+      <input type="password" formControlName="password" placeholder="Digite sua senha" required />
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          A senha deve ter pelo menos 6 caracteres.
       </div>
-  
-      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
-    </form>
-  </div>
-  
+    </div>
+
+    <!-- Mensagem de erro amigável -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Botão de Login com Spinner -->
+    <button type="submit" [disabled]="loginForm.invalid || isLoading">
+      <span *ngIf="!isLoading">Entrar</span>
+      <span *ngIf="isLoading" class="spinner"></span>
+    </button>
+  </form>
+</div>

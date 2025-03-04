@@ -1,0 +1,41 @@
+<div class="register-container">
+    <h2>Cadastro</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label>Nome de Usuário:</label>
+        <input type="text" formControlName="username" placeholder="Digite seu nome" required />
+        <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+          O nome deve ter pelo menos 3 caracteres.
+        </div>
+      </div>
+  
+      <div>
+        <label>Email:</label>
+        <input type="email" formControlName="email" placeholder="Digite seu email" required />
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          Email inválido.
+        </div>
+      </div>
+  
+      <div>
+        <label>Senha:</label>
+        <input type="password" formControlName="password" placeholder="Digite sua senha" required />
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          A senha deve ter pelo menos 6 caracteres.
+        </div>
+      </div>
+  
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+      
+  
+      <button type="submit" [disabled]="registerForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Cadastrar</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+    </form>
+  
+    <p>Já tem uma conta? <a routerLink="/login">Faça login</a></p>
+  </div>
+  

@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common'; // 💡 Importa o módulo comum
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  isLoading = false; // ✅ Estado de carregamento
+  errorMessage: string | null = null; // ✅ Mensagem de erro
 
   constructor(
     private authService: AuthService,
@@ -27,6 +29,9 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = null;
+  
       const email = this.loginForm.get('email')?.value;
       const password = this.loginForm.get('password')?.value;      
   
@@ -36,11 +41,14 @@ export class LoginComponent {
           this.router.navigate(['/dashboard']);
         },
         (error) => {
-          console.error('Erro no login:', error);
-          alert('Credenciais inválidas');
+          this.errorMessage = "Credenciais inválidas. Tente novamente.";
+          this.isLoading = false; // ✅ Agora o loading para quando der erro
+        },
+        () => {
+          this.isLoading = false; // ✅ Garante que o loading para após qualquer resposta
         }
       );
     }
   }
-  
-}
+}  
+

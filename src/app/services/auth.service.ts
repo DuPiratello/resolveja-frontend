@@ -6,12 +6,16 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000/auth/login'; // URL da API Flask
+  private apiUrl = 'http://localhost:5000/auth'; // URL da API Flask
 
   constructor(private http: HttpClient) {}
 
+  register(username: string, email: string, password: string) {
+    return this.http.post(`${this.apiUrl}/register`, { username, email, password });
+  }
+  
   login(email: string, password: string): Observable<any> {
-    return this.http.post(this.apiUrl, { email, password });
+    return this.http.post(`${this.apiUrl}/login`, { email, password });
   }
 
   saveToken(token: string) {

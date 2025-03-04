@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +10,18 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule]
 })
 export class AppComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
   title = 'Resolve Já';
 
   ngOnInit() {
-    this.http.get('http://localhost:5000/auth/protected').subscribe(
-      (response) => console.log('Sucesso:', response),
-      (error) => console.log('Erro:', error)
-    );
+    if (this.authService.getToken()) {
+      this.http.get('http://localhost:5000/auth/protected').subscribe(
+        (response) => console.log('✅ Sucesso:', response),
+        (error) => console.log('❌ Erro ao acessar API protegida:', error)
+      );
+    } else {
+      console.log("🔹 Usuário não autenticado, ignorando chamada à API protegida.");
+    }
   }
 }
