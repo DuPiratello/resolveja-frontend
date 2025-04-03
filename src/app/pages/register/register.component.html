@@ -1,41 +1,104 @@
 <div class="register-container">
-    <h2>Cadastro</h2>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label>Nome de Usuário:</label>
-        <input type="text" formControlName="username" placeholder="Digite seu nome" required />
-        <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
-          O nome deve ter pelo menos 3 caracteres.
-        </div>
+  <h2>Cadastro</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <!-- Nome de Usuário -->
+    <div class="form-group">
+      <label for="username">Nome de Usuário:</label>
+      <input
+        id="username"
+        type="text"
+        formControlName="username"
+        placeholder="Digite seu nome"
+        [class.invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+      />
+      <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="error-message">
+        <span *ngIf="registerForm.get('username')?.errors?.['required']">Campo obrigatório.</span>
+        <span *ngIf="registerForm.get('username')?.errors?.['minlength']">Mínimo 3 caracteres.</span>
       </div>
-  
-      <div>
-        <label>Email:</label>
-        <input type="email" formControlName="email" placeholder="Digite seu email" required />
-        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-          Email inválido.
-        </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="Digite seu email"
+        [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+      />
+      <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error-message">
+        <span *ngIf="registerForm.get('email')?.errors?.['required']">Campo obrigatório.</span>
+        <span *ngIf="registerForm.get('email')?.errors?.['email']">Email inválido.</span>
       </div>
-  
-      <div>
-        <label>Senha:</label>
-        <input type="password" formControlName="password" placeholder="Digite sua senha" required />
-        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-          A senha deve ter pelo menos 6 caracteres.
-        </div>
+    </div>
+
+    <!-- Senha -->
+    <div class="form-group">
+      <label for="password">Senha:</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        placeholder="Digite sua senha"
+        [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+      />
+      <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error-message">
+        <span *ngIf="registerForm.get('password')?.errors?.['required']">Campo obrigatório.</span>
+        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres.</span>
       </div>
-  
-      <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
+    </div>
+
+    <!-- Telefone (com máscara) -->
+    <div class="form-group">
+      <label for="phone">Telefone:</label>
+      <input
+        id="phone"
+        type="text"
+        formControlName="phone"
+        placeholder="(xx) x xxxx-xxxx"
+        (input)="formatPhone($event)"
+        [class.invalid]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
+      />
+      <div *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched" class="error-message">
+        <span *ngIf="registerForm.get('phone')?.errors?.['required']">Campo obrigatório.</span>
+        <span *ngIf="registerForm.get('phone')?.errors?.['pattern']">Formato: (xx) x xxxx-xxxx</span>
       </div>
-      
-  
-      <button type="submit" [disabled]="registerForm.invalid || isLoading">
-        <span *ngIf="!isLoading">Cadastrar</span>
-        <span *ngIf="isLoading" class="spinner"></span>
-      </button>
-    </form>
-  
-    <p>Já tem uma conta? <a routerLink="/login">Faça login</a></p>
-  </div>
-  
+    </div>
+
+    <!-- CPF (com máscara) -->
+    <div class="form-group">
+      <label for="cpf">CPF:</label>
+      <input
+        id="cpf"
+        type="text"
+        formControlName="cpf"
+        placeholder="xxx.xxx.xxx-xx"
+        (input)="formatCPF($event)"
+        [class.invalid]="registerForm.get('cpf')?.invalid && registerForm.get('cpf')?.touched"
+      />
+      <div *ngIf="registerForm.get('cpf')?.invalid && registerForm.get('cpf')?.touched" class="error-message">
+        <span *ngIf="registerForm.get('cpf')?.errors?.['required']">Campo obrigatório.</span>
+        <span *ngIf="registerForm.get('cpf')?.errors?.['pattern']">Formato: xxx.xxx.xxx-xx</span>
+      </div>
+    </div>
+
+    <!-- Mensagem de erro geral -->
+    <div *ngIf="errorMessage" class="error-message server-error">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Botão de submit -->
+    <button
+      type="submit"
+      class="submit-button"
+      [disabled]="registerForm.invalid || isLoading"
+      [class.loading]="isLoading"
+    >
+      <span *ngIf="!isLoading">Cadastrar</span>
+      <span *ngIf="isLoading" class="spinner"></span>
+    </button>
+  </form>
+
+  <p class="login-link">Já tem uma conta? <a routerLink="login">Faça login</a></p>
+</div>

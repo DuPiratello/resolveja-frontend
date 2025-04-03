@@ -2,19 +2,20 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // 💡 Importa o módulo comum
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [CommonModule, ReactiveFormsModule] // 💡 Agora o *ngIf e o formulário vão funcionar
+  imports: [CommonModule, ReactiveFormsModule, RouterLink]
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  isLoading = false; // ✅ Estado de carregamento
-  errorMessage: string | null = null; // ✅ Mensagem de erro
+  isLoading = false;
+  errorMessage: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -31,24 +32,26 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.errorMessage = null;
-  
-      const email = this.loginForm.get('email')?.value;
-      const password = this.loginForm.get('password')?.value;      
-  
-      this.authService.login(email, password).subscribe(
-        (response) => {
+      
+      // ✅ Agora enviando como objeto
+      this.authService.login({
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password
+      }).subscribe({
+        next: (response) => {
           this.authService.saveToken(response.access_token);
           this.router.navigate(['/dashboard']);
         },
-        (error) => {
-          this.errorMessage = "Credenciais inválidas. Tente novamente.";
-          this.isLoading = false; // ✅ Agora o loading para quando der erro
+        error: (error) => {
+          this.errorMessage = error.status === 401 
+            ? "Credenciais inválidas" 
+            : "Erro ao fazer login. Tente novamente.";
+          this.isLoading = false;
         },
-        () => {
-          this.isLoading = false; // ✅ Garante que o loading para após qualquer resposta
+        complete: () => {
+          this.isLoading = false;
         }
-      );
+      });
     }
   }
-}  
-
+}

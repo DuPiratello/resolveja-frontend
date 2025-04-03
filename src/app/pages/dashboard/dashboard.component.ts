@@ -6,6 +6,7 @@ import { Denuncia } from '../../models/denuncia';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
