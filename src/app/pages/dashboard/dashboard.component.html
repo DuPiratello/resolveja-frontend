@@ -23,7 +23,9 @@
     </div>
 
     <button (click)="novaDenuncia()" class="nova-denuncia-btn">+ Nova Denúncia</button>
-
+    @if (isopen) {
+      <app-nova-denuncia></app-nova-denuncia>
+    }
     <table>
       <thead>
         <tr>
