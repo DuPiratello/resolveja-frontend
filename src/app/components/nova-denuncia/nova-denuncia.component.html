@@ -28,6 +28,16 @@
           <option value="lixo">Lixo</option>
         </select>
       </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea 
+          id="descricao" 
+          name="descricao" 
+          [(ngModel)]="denuncia.descricao" 
+          placeholder="Descreva o problema detalhadamente"
+        ></textarea>
+      </div>
       
       <div class="form-group">
         <label for="imagem">Adicionar Imagem (Opcional)</label>
@@ -44,7 +54,10 @@
           <button type="button" class="remove-btn" (click)="removeImage()">×</button>
         </div>
       </div>
-      
+      <div class="map-container">
+        <app-mapa (localConfirmadoEvent)="atualizarCoordenadas($event)"></app-mapa>
+      </div>
+
       <button type="submit" class="submit-btn" [disabled]="!denuncia.titulo || !denuncia.tipo">Enviar Denúncia</button>
     </form>
   </div>

@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DenunciaService } from '../../services/denuncia.service';
 import { Denuncia } from '../../models/denuncia';
+import { MapaComponent } from '../../components/mapa/mapa.component'; // Importando o componente de mapa
 
 @Component({
   selector: 'app-nova-denuncia',
   standalone: true,
   templateUrl: './nova-denuncia.component.html',
   styleUrls: ['./nova-denuncia.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, MapaComponent] // Importando o componente de mapa
 })
 export class NovaDenunciaComponent {
   @Output() denunciaSubmitted = new EventEmitter<Denuncia>();
@@ -18,7 +19,9 @@ export class NovaDenunciaComponent {
     titulo: '',
     tipo: '',
     id: 0,
-    status: 'Pendente' // Valor padrão
+    status: 'Pendente', // Valor padrão
+    endereco: '',
+    descricao: ''
   };
   
   imagePreview: string | ArrayBuffer | null = null;
@@ -49,10 +52,14 @@ export class NovaDenunciaComponent {
   }
 
   submitDenuncia() {
+    console.log('Dados enviados:', this.denuncia); // Log para verificar os dados
+
     const denuncia = {
       titulo: this.denuncia.titulo,
       tipo: this.denuncia.tipo,
-      status: this.denuncia.status
+      status: this.denuncia.status,
+      endereco: this.denuncia.endereco, // Coordenadas
+      descricao: this.denuncia.descricao // Descrição
     };
 
     this.denunciaService.criarDenuncia(denuncia).subscribe({
@@ -76,7 +83,8 @@ export class NovaDenunciaComponent {
     const denuncia: Partial<Denuncia> = {
       titulo: titulo,
       tipo: tipo,
-      status: 'Pendente'
+      status: 'Pendente',
+      endereco: this.denuncia.endereco, // Coordenadas
     };
     this.denunciaService.criarDenuncia(denuncia).subscribe({
       next: (novaDenuncia) => {
@@ -94,8 +102,15 @@ export class NovaDenunciaComponent {
       titulo: '',
       tipo: '',
       id: 0,
-      status: 'Pendente'
+      status: 'Pendente',
+      endereco: '',
+      descricao: ''
     };
     this.removeImage();
+  }
+  
+  atualizarCoordenadas(coords: { lat: number; lng: number }) {
+    this.denuncia.endereco = `${coords.lat},${coords.lng}`;
+    console.log('Coordenadas atualizadas no formulário:', this.denuncia.endereco);
   }
 }

@@ -1,0 +1,6 @@
+<div id="map" style="height: 500px;"></div>
+
+<div style="margin-top: 10px;">
+  <button (click)="confirmarLocal()" [disabled]="localConfirmado || !selectedCoords">Confirmar Local</button>
+  <button (click)="redefinirLocal()" [disabled]="!localConfirmado">Selecionar Outro Local</button>
+</div>

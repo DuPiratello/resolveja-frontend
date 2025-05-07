@@ -7,12 +7,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NovaDenunciaComponent } from '../../components/nova-denuncia/nova-denuncia.component';
 
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, FormsModule, NovaDenunciaComponent]
+  imports: [CommonModule, FormsModule, NovaDenunciaComponent] // Importando o componente de mapa
 })
 export class DashboardComponent implements OnInit {
   denuncias: Denuncia[] = [];
