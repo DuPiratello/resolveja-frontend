@@ -1,0 +1,21 @@
+<div class="denuncias-wrapper">
+    <h2 class="denuncias-title">Denúncias</h2>
+    <p class="denuncias-subtitle">Sua voz transforma a cidade.</p>
+  
+    <div class="cards-grid">
+        @for (denuncia of denunciasFiltradas; track $index) {
+            <div class="denuncia-card">
+                <h3 class="card-header">“{{ denuncia.titulo }}”</h3>
+                <div class="card-body">
+                <img id="card-avatar" src="assets/defaultProfile.png" alt="card-avatar" class="card-avatar">
+                <div class="card-info">
+                    <div style="opacity: 50%;">status</div>
+                    <span class="status-label">{{ denuncia.status }}</span>
+                    <span class="status-desc">{{ denuncia.descricao }}</span>
+                </div>
+                </div>
+            </div>
+        }
+    </div>
+  </div>
+  

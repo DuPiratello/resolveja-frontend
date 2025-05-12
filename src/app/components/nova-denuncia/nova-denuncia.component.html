@@ -55,9 +55,14 @@
         </div>
       </div>
       <div class="map-container">
-        <app-mapa (localConfirmadoEvent)="atualizarCoordenadas($event)"></app-mapa>
+        <app-mapa 
+        (localConfirmadoEvent)="atualizarCoordenadas($event)"
+        (localResetEvent)="resetLocalConfirmado()"></app-mapa>
       </div>
 
-      <button type="submit" class="submit-btn" [disabled]="!denuncia.titulo || !denuncia.tipo">Enviar Denúncia</button>
+      <button 
+      type="submit" 
+      class="submit-btn" 
+      [disabled]="!denuncia.titulo || !denuncia.tipo || !localConfirmado">Enviar Denúncia</button>
     </form>
   </div>

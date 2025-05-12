@@ -9,6 +9,7 @@ import * as L from 'leaflet';
 })
 export class MapaComponent implements AfterViewInit {
 @Output() localConfirmadoEvent = new EventEmitter<{ lat: number; lng: number }>();
+@Output() localResetEvent = new EventEmitter<void>();
 
   map!: L.Map;
   selectedCoords: { lat: number; lng: number } | null = null;
@@ -16,9 +17,8 @@ export class MapaComponent implements AfterViewInit {
   localConfirmado: boolean = false;
 
   ngAfterViewInit(): void {
-    this.map = L.map('map').setView([-23.55, -46.63], 13);
+    this.map = L.map('map').setView([-23.5016, -47.4581], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
 
     this.map.on('click', (e: L.LeafletMouseEvent) => {
@@ -59,5 +59,7 @@ export class MapaComponent implements AfterViewInit {
       this.map.removeLayer(this.marker);
       this.marker = null;
     }
+
+    this.localResetEvent.emit(); // Emite o evento para o componente pai
   }
 }

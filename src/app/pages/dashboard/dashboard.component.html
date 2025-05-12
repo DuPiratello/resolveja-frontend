@@ -22,25 +22,18 @@
       </select>
     </div>
 
-    <button (click)="novaDenuncia()" class="nova-denuncia-btn">+ Nova Denúncia</button>
-    @if (isopen) {
-      <app-nova-denuncia></app-nova-denuncia>
-    }
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Título</th>
-          <th>Tipo</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let denuncia of denunciasFiltradas">
-          <td>{{ denuncia.id }}</td>
-          <td>{{ denuncia.titulo }}</td>
-          <td>{{ denuncia.tipo }}</td>
-          <td>{{ denuncia.status }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Botão que alterna entre "Nova Denúncia" e "Fechar" -->
+  <button (click)="toggleNovaDenuncia()" class="nova-denuncia-btn">
+    {{ isOpen ? 'Fechar' : '+ Nova Denúncia' }}
+  </button>
+
+  <!-- Exibe o componente de nova denúncia se isOpen for true -->
+  <div *ngIf="isOpen">
+    <app-nova-denuncia></app-nova-denuncia>
+  </div>
+
+  <app-denuncias-cards
+  [denunciasFiltradas]="denunciasFiltradas">
+</app-denuncias-cards>
+
+  <app-heatmap></app-heatmap>

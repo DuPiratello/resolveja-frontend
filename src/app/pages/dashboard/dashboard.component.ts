@@ -6,21 +6,22 @@ import { Denuncia } from '../../models/denuncia';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NovaDenunciaComponent } from '../../components/nova-denuncia/nova-denuncia.component';
-
+import { DenunciasCardsComponent } from '../../components/denuncias-cards/denuncias-cards.component'; // Importando o componente de mapa
+import { HeatmapComponent } from '../../components/heatmap/heatmap.component';  
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, FormsModule, NovaDenunciaComponent] // Importando o componente de mapa
+  imports: [CommonModule, FormsModule, NovaDenunciaComponent, DenunciasCardsComponent, HeatmapComponent] // Importando o componente de mapa
 })
 export class DashboardComponent implements OnInit {
   denuncias: Denuncia[] = [];
   denunciasFiltradas: Denuncia[] = [];
   selectedStatus = '';
   selectedTipo = '';
-  isopen: boolean = false;
+  isOpen: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -58,7 +59,10 @@ export class DashboardComponent implements OnInit {
   }
 
   novaDenuncia() {
-    this.isopen = true;
+    this.isOpen = true;
+  }
+  toggleNovaDenuncia() {
+    this.isOpen = !this.isOpen; // Alterna entre true e false
   }
 
   logout() {

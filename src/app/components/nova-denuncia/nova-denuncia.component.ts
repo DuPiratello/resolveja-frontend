@@ -26,6 +26,7 @@ export class NovaDenunciaComponent {
   
   imagePreview: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
+  localConfirmado: boolean = false; // Inicialmente falso
 
   constructor(private denunciaService: DenunciaService) {}
 
@@ -111,6 +112,11 @@ export class NovaDenunciaComponent {
   
   atualizarCoordenadas(coords: { lat: number; lng: number }) {
     this.denuncia.endereco = `${coords.lat},${coords.lng}`;
+    this.localConfirmado = true; // Atualiza para verdadeiro quando o local é confirmado
     console.log('Coordenadas atualizadas no formulário:', this.denuncia.endereco);
+  }
+
+  resetLocalConfirmado() {
+    this.localConfirmado = false; // Reseta caso o usuário selecione outro local
   }
 }
