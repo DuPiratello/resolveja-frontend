@@ -6,8 +6,8 @@ interface RegisterData {
   username: string;
   email: string;
   password: string;
-  phone: string;  // 👈 Agora como string (números sem máscara)
-  cpf: string;    // 👈 Agora como string (números sem máscara)
+  phone: string; 
+  cpf: string;    
 }
 
 interface LoginData {

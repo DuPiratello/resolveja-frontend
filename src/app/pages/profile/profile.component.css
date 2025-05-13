@@ -1,0 +1,138 @@
+/* Hero styles */
+.hero {
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 0 16px;
+  }
+  
+  .hero .container {
+    max-width: 800px;
+    position: relative;
+  }
+  
+  .hero .title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    animation: fadeIn 1s ease-out;
+  }
+  
+  .hero .subtitle {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #555;
+    margin-bottom: 32px;
+    animation: fadeIn 1.2s ease-out;
+  }
+  
+  .edit-profile-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.2s ease;
+  }
+  
+  .edit-profile-btn:hover {
+    color: #555;
+  }
+  
+  /* Denúncias Section */
+  .denuncias-section {
+    padding: 32px 16px;
+    text-align: center;
+  }
+  
+  .denuncias-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  
+  .denuncias-subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #777;
+    margin-bottom: 24px;
+  }
+  
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    max-width: 1200px; /* Limita a largura máxima do grid */
+    margin: 0 auto; /* Centraliza o grid horizontalmente */
+    gap: 16px;
+    justify-content: center; /* Garante que os itens fiquem centralizados */
+  }
+  
+  .denuncia-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .denuncia-card .card-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .denuncia-card .card-body {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .denuncia-card .card-body img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .denuncia-card .card-info {
+    flex: 1;
+  }
+  
+  .denuncia-card .status-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .denuncia-card .status-desc {
+    font-size: 0.8rem;
+    color: #777;
+  }
+  .btn {
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+  
+  .btn-outline {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: #333;
+  }
+  
+  .btn-outline:hover {
+    background-color: #f5f5f5;
+    border-color: #aaa;
+  }

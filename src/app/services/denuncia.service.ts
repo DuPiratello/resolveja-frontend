@@ -7,7 +7,7 @@ import { Denuncia } from '../models/denuncia';
   providedIn: 'root'
 })
 export class DenunciaService {
-  private apiUrl = 'http://127.0.0.1:5000/api'; // Substitua pela URL da sua API
+  private apiUrl = 'http://127.0.0.1:5000/api'; 
 
   constructor(private http: HttpClient) { }
 
@@ -18,5 +18,11 @@ export class DenunciaService {
   }
   getDenuncias(): Observable<Denuncia[]> {
     return this.http.get<Denuncia[]>(`${this.apiUrl}/denuncias`);
+  }
+  getMinhasDenuncias() {
+    return this.http.get<Denuncia[]>(`${this.apiUrl}/minhas-denuncias`);
+  }
+  getCoordenadas(): Observable<[number, number, number][]> {
+    return this.http.get<[number, number, number][]>(`${this.apiUrl}/coordenadas`);
   }
 }

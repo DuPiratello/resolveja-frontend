@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.heat';
+import { DenunciaService } from '../../services/denuncia.service';
 
 @Component({
   selector: 'app-heatmap',
@@ -10,8 +11,11 @@ import 'leaflet.heat';
 export class HeatmapComponent implements AfterViewInit {
   map: L.Map | undefined;
 
+  constructor(private denunciaService: DenunciaService) {}
+
   ngAfterViewInit(): void {
     this.initMap();
+    this.carregarCoordenadas();
   }
 
   initMap(): void {
@@ -21,27 +25,30 @@ export class HeatmapComponent implements AfterViewInit {
     // Adiciona o tile layer (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     }).addTo(this.map);
+  }
 
-    // Dados de exemplo (array de [lat, lng, intensity])
-    const heatData: [number, number, number][] = [
-      [-23.5016, -47.4581, 0.8],  // Sorocaba - alta intensidade
-      [-23.5100, -47.4500, 0.5],  // Região próxima
-      [-23.4950, -47.4650, 0.3],  // Outra área
-      [-23.5200, -47.4400, 0.6]   // Mais um ponto
-    ];
+  carregarCoordenadas(): void {
+    this.denunciaService.getCoordenadas().subscribe({
+      next: (heatData) => {
+        console.log('Coordenadas carregadas:', heatData);
 
-    // Cria o mapa de calor
-    (L as any).heatLayer(heatData, {
-      radius: 25,       // Tamanho do raio de cada ponto
-      blur: 15,         // Desfoque entre os pontos
-      maxZoom: 10,      // Zoom máximo onde o calor aparece
-      gradient: {       // Cores do gradiente (opcional)
-        0.4: 'blue',
-        0.6: 'cyan',
-        0.7: 'lime',
-        0.8: 'yellow',
-        1.0: 'red'
+        // Cria o mapa de calor com os dados recebidos
+        (L as any).heatLayer(heatData, {
+          radius: 25,       // Tamanho do raio de cada ponto
+          blur: 15,         // Desfoque entre os pontos
+          maxZoom: 10,      // Zoom máximo onde o calor aparece
+          gradient: {       // Cores do gradiente (opcional)
+            0.4: 'blue',
+            0.6: 'cyan',
+            0.7: 'lime',
+            0.8: 'yellow',
+            1.0: 'red'
+          }
+        }).addTo(this.map);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar coordenadas:', err);
       }
-    }).addTo(this.map);
+    });
   }
 }
