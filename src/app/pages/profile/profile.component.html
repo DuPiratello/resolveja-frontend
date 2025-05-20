@@ -4,14 +4,13 @@
       <div class="container">
         <h1 class="title">"EDU"</h1>
         <p class="subtitle">Ajudando a cidade!</p>
-        <button class="btn btn-outline" routerLink="/dashboard">Voltar para o Dashboard</button>
+        <button class="btn btn-outline" [routerLink]="'/dashboard'">Voltar para o Dashboard</button>
       </div>
     </section>
   
     <!-- Denúncias Section -->
     <section class="denuncias-section">
-      <h2 class="denuncias-title">Denúncias já criadas</h2>
-      <p class="denuncias-subtitle">Sua voz transforma a cidade.</p>
+      <h2 class="denuncias-title">Minhas denuncias</h2>
   
       <div class="cards-grid">
         <app-denuncias-cards [denunciasFiltradas]="minhasDenuncias"></app-denuncias-cards>

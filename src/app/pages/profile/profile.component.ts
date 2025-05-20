@@ -3,12 +3,13 @@ import { DenunciaService } from '../../services/denuncia.service';
 import { Denuncia } from '../../models/denuncia';
 import { DenunciasCardsComponent } from '../../components/denuncias-cards/denuncias-cards.component';
 import { AuthService } from '../../services/auth.service'; // Serviço de autenticação (se existir)
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  imports: [DenunciasCardsComponent]
+  imports: [DenunciasCardsComponent, RouterModule]
 })
 export class ProfileComponent implements OnInit {
   minhasDenuncias: Denuncia[] = [];

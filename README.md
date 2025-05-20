@@ -1,59 +1,219 @@
-# Frontend
+# Frontend - ResolveJá
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
+Este diretório contém o frontend Angular do ResolveJá, responsável pela interface de denúncias, autenticação, painel do usuário e integração com o backend Flask.
 
-## Development server
+---
 
-To start a local development server, run:
+## 📦 Estrutura de Pastas
 
-```bash
-ng serve
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── denuncias-cards/
+│   │   │   │   ├── denuncias-cards.component.ts
+│   │   │   │   ├── denuncias-cards.component.html
+│   │   │   │   └── denuncias-cards.component.css
+│   │   │   ├── nova-denuncia/
+│   │   │   │   ├── nova-denuncia.component.ts
+│   │   │   │   ├── nova-denuncia.component.html
+│   │   │   │   └── nova-denuncia.component.css
+│   │   │   └── ...
+│   │   ├── guards/
+│   │   │   └── auth.guard.ts
+│   │   ├── models/
+│   │   │   ├── denuncia.model.ts
+│   │   │   └── usuario.model.ts
+│   │   ├── pages/
+│   │   │   ├── dashboard/
+│   │   │   │   ├── dashboard.component.ts
+│   │   │   │   └── dashboard.component.html
+│   │   │   ├── home/
+│   │   │   ├── login/
+│   │   │   ├── profile/
+│   │   │   └── ...
+│   │   ├── services/
+│   │   │   ├── denuncia.service.ts
+│   │   │   ├── auth.service.ts
+│   │   │   └── usuario.service.ts
+│   │   ├── app.component.ts
+│   │   ├── app.routes.ts
+│   │   └── app.module.ts
+│   ├── assets/
+│   │   └── imagens/
+│   ├── environments/
+│   │   ├── environment.ts
+│   │   └── environment.prod.ts
+│   ├── index.html
+│   ├── main.ts
+│   └── styles.css
+├── angular.json
+├── package.json
+└── tsconfig.json
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🛣️ Rotas e Navegação
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+As rotas são definidas em `app.routes.ts` e incluem:
 
-```bash
-ng generate component component-name
-```
+- `/` — Página inicial (`HomeComponent`)
+- `/login` — Login de usuário (`LoginComponent`)
+- `/dashboard` — Painel principal com listagem de denúncias (`DashboardComponent`)
+- `/nova-denuncia` — Formulário para registrar nova denúncia (`NovaDenunciaComponent`)
+- `/minhas-denuncias` — Lista de denúncias do usuário autenticado (`MinhasDenunciasComponent`)
+- `/profile` — Perfil do usuário (`ProfileComponent`)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Rotas como `/dashboard`, `/nova-denuncia` e `/minhas-denuncias` são protegidas pelo `AuthGuard` (`guards/auth.guard.ts`), que verifica o token JWT no `localStorage`.
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 🔑 Autenticação
 
-To build the project run:
+- **Serviço:** `auth.service.ts`
+- **Fluxo:**  
+  - Login envia usuário/senha para o backend (`/auth/login`), recebe JWT e armazena no `localStorage`.
+  - O token é incluído automaticamente no header `Authorization` de todas as requisições autenticadas.
+  - Logout remove o token e redireciona para `/login`.
+- **Guarda de Rotas:**  
+  - `AuthGuard` impede acesso a rotas protegidas sem autenticação.
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📋 Componentes Específicos
 
-## Running unit tests
+- **`denuncias-cards`**  
+  Exibe cards de denúncias com título, descrição, status, data, imagem (se houver) e localização.  
+  Usa *ngFor para renderizar a lista e aplica classes CSS para status diferentes.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **`nova-denuncia`**  
+  Formulário reativo com validação de campos obrigatórios, upload de imagem (preview antes do envio), seleção de localização (campo latitude/longitude) e envio para o backend via `DenunciaService`.
 
-```bash
-ng test
-```
+- **`dashboard`**  
+  Mostra todas as denúncias públicas, permite filtrar por status, tipo ou data.  
+  Chama `DenunciaService.getDenuncias()` na inicialização.
 
-## Running end-to-end tests
+- **`minhas-denuncias`**  
+  Lista apenas as denúncias do usuário autenticado, com opção de editar ou remover se permitido.
 
-For end-to-end (e2e) testing, run:
+- **`profile`**  
+  Exibe dados do usuário, permite atualização de informações básicas.
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🔗 Integração com Backend
 
-## Additional Resources
+- **Base URL:** Definida em `environment.ts` (ex: `http://localhost:5000/api`)
+- **Serviços:**  
+  - `DenunciaService` faz chamadas para `/denuncias`, `/minhas-denuncias`, `/denuncias/:id`
+  - `AuthService` para `/auth/login`, `/auth/register`
+  - `UsuarioService` para `/usuarios/:id`
+- **Tratamento de Erros:**  
+  - Erros de autenticação redirecionam para `/login`
+  - Mensagens de erro exibidas via alertas ou componentes de feedback
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## 🧩 Modelos Tipados
+
+- **`Denuncia`** (`models/denuncia.model.ts`)
+  ```typescript
+  export interface Denuncia {
+    id: number;
+    titulo: string;
+    descricao: string;
+    status: 'aberta' | 'em_andamento' | 'resolvida';
+    dataCriacao: Date;
+    imagemUrl?: string;
+    latitude: number;
+    longitude: number;
+    usuarioId: number;
+  }
+  ```
+- **`Usuario`** (`models/usuario.model.ts`)
+  ```typescript
+  export interface Usuario {
+    id: number;
+    nome: string;
+    email: string;
+    role: 'admin' | 'usuario';
+  }
+  ```
+
+---
+
+## 🖼️ Upload e Preview de Imagem
+
+- O componente `nova-denuncia` permite selecionar uma imagem.
+- O preview é exibido antes do envio usando FileReader.
+- Pela baixa demanda não há necessidade de uma estrutura complexa por conta disso as imagens será salva no diretório src/assets
+
+---
+
+## 🗺️ Localização
+
+- O formulário de denúncia captura a localização por campos para latitude e longitude.
+- Atualmente utiliza APIs de mapas do Leaflet mas futuramente pode ser migrado para o Google Maps
+
+---
+
+## 🛠️ Boas Práticas e Convenções
+
+- **Responsividade:**  
+  CSS customizado para mobile e desktop, sem uso de frameworks externos.
+- **Reutilização:**  
+  Componentes e serviços são reutilizados em várias páginas.
+- **Separação de responsabilidades:**  
+  Serviços cuidam da lógica de dados, componentes apenas da interface.
+- **Validação:**  
+  Formulários reativos com validação de campos obrigatórios e feedback visual.
+- **Feedback ao usuário:**  
+  Mensagens de sucesso/erro após ações importantes.
+
+---
+
+## ❌ O que NÃO está implementado
+
+- Não há gerenciamento global de estado (NgRx, Akita, etc.).
+- Não há internacionalização (i18n).
+- Não há testes unitários ou e2e além do padrão Angular.
+- Não há integração com bibliotecas de UI externas (Material, Bootstrap).
+- Não há SSR (Server Side Rendering).
+
+---
+
+## 🛠️ Como rodar o frontend
+
+1. Instale as dependências:
+   ```bash
+   npm install
+   ```
+2. Configure a URL do backend em `src/environments/environment.ts` se necessário.
+3. Rode o servidor de desenvolvimento:
+   ```bash
+   ng serve
+   ```
+4. Acesse em [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 🧪 Testes
+
+- **Unitários:**  
+  ```bash
+  ng test
+  ```
+
+---
+
+## 📚 Referências
+
+- [Angular Documentation](https://angular.dev/docs)
+- [Angular CLI](https://angular.dev/tools/cli)
+- [Guia de Boas Práticas Angular](https://angular.io/guide/styleguide)
+
+---
+
+**Dúvidas ou sugestões? Abra uma issue ou entre em contato com o time!**
