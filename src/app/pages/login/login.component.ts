@@ -40,7 +40,12 @@ export class LoginComponent {
       }).subscribe({
         next: (response) => {
           this.authService.saveToken(response.access_token);
-          this.router.navigate(['/dashboard']);
+          const role = this.authService.getUserRole();
+          if (role === 'admin') {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.router.navigate(['/userpage']);
+          }
         },
         error: (error) => {
           this.errorMessage = error.status === 401 

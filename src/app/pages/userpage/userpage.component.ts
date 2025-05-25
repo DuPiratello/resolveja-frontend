@@ -9,17 +9,16 @@ import { NovaDenunciaComponent } from '../../components/nova-denuncia/nova-denun
 import { DenunciasCardsComponent } from '../../components/denuncias-cards/denuncias-cards.component'; // Importando o componente de mapa
 import { HeatmapComponent } from '../../components/heatmap/heatmap.component';  
 import { RouterModule } from '@angular/router';
-import { GraphsComponent } from '../../components/graphs/graphs.component';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, RouterModule, FormsModule, NovaDenunciaComponent, DenunciasCardsComponent, HeatmapComponent, GraphsComponent] // Importando o componente de mapa
+  templateUrl: './userpage.component.html',
+  styleUrls: ['./userpage.component.css'],
+  imports: [CommonModule, RouterModule, FormsModule, NovaDenunciaComponent, DenunciasCardsComponent, HeatmapComponent] // Importando o componente de mapa
 })
-export class DashboardComponent implements OnInit {
+export class UserPageComponent implements OnInit {
   denuncias: Denuncia[] = [];
   denunciasFiltradas: Denuncia[] = [];
   selectedStatus = '';

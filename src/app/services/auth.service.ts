@@ -61,6 +61,20 @@ export class AuthService {
     localStorage.removeItem('access_token');
   }
 
+  // Obtém o papel do usuário a partir do token
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      // JWT: header.payload.signature
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Payload JWT:', payload);
+      return payload.role || null;
+    } catch {
+      return null;
+    }
+  }
+
   // Tratamento centralizado de erros HTTP
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Erro desconhecido';
