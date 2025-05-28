@@ -19,6 +19,18 @@ interface LoginData {
   providedIn: 'root'
 })
 export class AuthService {
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Ajuste o campo conforme o backend: sub, id, user_id, etc.
+      return payload.sub || payload.id || payload.user_id || null;
+    } catch {
+      return null;
+    }
+}
+
   private apiUrl = 'http://localhost:5000/auth'; // URL da API Flask
 
   constructor(private http: HttpClient) {}
@@ -74,6 +86,7 @@ export class AuthService {
       return null;
     }
   }
+  
 
   // Tratamento centralizado de erros HTTP
   private handleError(error: HttpErrorResponse): Observable<never> {
