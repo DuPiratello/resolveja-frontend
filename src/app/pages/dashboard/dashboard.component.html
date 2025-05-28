@@ -23,15 +23,6 @@
       </select>
     </div>
 
-  <!-- Botão que alterna entre "Nova Denúncia" e "Fechar" -->
-  <button (click)="toggleNovaDenuncia()" class="nova-denuncia-btn">
-    {{ isOpen ? 'Fechar' : '+ Nova Denúncia' }}
-  </button>
-
-  <!-- Exibe o componente de nova denúncia se isOpen for true -->
-  <div *ngIf="isOpen">
-    <app-nova-denuncia></app-nova-denuncia>
-  </div>
 
   <app-denuncias-cards
   [denunciasFiltradas]="denunciasFiltradas">

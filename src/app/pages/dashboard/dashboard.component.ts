@@ -5,7 +5,6 @@ import { DenunciaService } from '../../services/denuncia.service';
 import { Denuncia } from '../../models/denuncia';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NovaDenunciaComponent } from '../../components/nova-denuncia/nova-denuncia.component';
 import { DenunciasCardsComponent } from '../../components/denuncias-cards/denuncias-cards.component'; // Importando o componente de mapa
 import { HeatmapComponent } from '../../components/heatmap/heatmap.component';  
 import { RouterModule } from '@angular/router';
@@ -17,7 +16,7 @@ import { GraphsComponent } from '../../components/graphs/graphs.component';
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, RouterModule, FormsModule, NovaDenunciaComponent, DenunciasCardsComponent, HeatmapComponent, GraphsComponent] // Importando o componente de mapa
+  imports: [CommonModule, RouterModule, FormsModule, DenunciasCardsComponent, HeatmapComponent, GraphsComponent] // Importando o componente de mapa
 })
 export class DashboardComponent implements OnInit {
   denuncias: Denuncia[] = [];
@@ -59,10 +58,6 @@ export class DashboardComponent implements OnInit {
       (!this.selectedStatus || normalizeText(d.status || '') === normalizeText(this.selectedStatus)) &&
       (!this.selectedTipo || normalizeText(d.tipo || '') === normalizeText(this.selectedTipo))
     );
-  }
-
-  novaDenuncia() {
-    this.isOpen = true;
   }
   toggleNovaDenuncia() {
     this.isOpen = !this.isOpen; // Alterna entre true e false
