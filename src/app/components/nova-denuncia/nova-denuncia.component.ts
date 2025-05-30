@@ -21,7 +21,9 @@ export class NovaDenunciaComponent {
     id: 0,
     status: 'Pendente', // Valor padrão
     endereco: '',
-    descricao: ''
+    descricao: '',
+    usuarioFotoUrl: '',
+    usuario: null
   };
   
   imagePreview: string | ArrayBuffer | null = null;
@@ -100,13 +102,15 @@ export class NovaDenunciaComponent {
 
   private resetForm() {
     this.denuncia = {
-      titulo: '',
-      tipo: '',
-      id: 0,
-      status: 'Pendente',
-      endereco: '',
-      descricao: ''
-    };
+    titulo: '',
+    tipo: '',
+    id: 0,
+    status: 'Pendente',
+    endereco: '',
+    descricao: '',
+    usuarioFotoUrl: '',
+    usuario: null
+  };
     this.removeImage();
   }
   

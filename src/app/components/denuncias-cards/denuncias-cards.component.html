@@ -7,7 +7,7 @@
             <div class="denuncia-card">
                 <h3 class="card-header">“{{ denuncia.titulo }}”</h3>
                 <div class="card-body">
-                <img id="card-avatar" src="assets/defaultProfile.png" alt="card-avatar" class="card-avatar">
+                <img id="card-avatar" [src]="getFotoUrl(denuncia)" alt="card-avatar" class="card-avatar"/>
                 <div class="card-info">
                     <div style="opacity: 50%;">status</div>
                     <span class="status-label">{{ denuncia.status }}</span>

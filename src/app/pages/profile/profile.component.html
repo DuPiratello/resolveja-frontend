@@ -1,19 +1,45 @@
 <div class="profile-container">
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="container">
-        <h1 class="title">{{nomeUsuario}}</h1>
-        <p class="subtitle">Ajudando a cidade!</p>
-        <button class="btn btn-outline" [routerLink]="'/dashboard'">Voltar para o Dashboard</button>
-      </div>
-    </section>
-  
-    <!-- Denúncias Section -->
-    <section class="denuncias-section">
-      <h2 class="denuncias-title">Minhas denuncias</h2>
-  
-      <div class="cards-grid">
-        <app-denuncias-cards [denunciasFiltradas]="minhasDenuncias"></app-denuncias-cards>
-      </div>
-    </section>
+  <!-- Foto de perfil no canto superior direito -->
+  <div style="position:absolute;top:24px;right:32px;z-index:10;">
+    <img [src]="getFotoUrl()" alt="Foto de Perfil" class="profile-avatar">
   </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="title">{{nomeUsuario}}</h1>
+      <p class="subtitle">Ajudando a cidade!</p>
+      <button class="btn btn-primary" (click)="abrirModalEdicao()">Alterar Dados</button>
+      <button class="btn btn-outline" [routerLink]="isAdmin ? '/dashboard' : '/userpage'">{{ isAdmin ? 'Voltar para o Dashboard' : 'Voltar para página inicial' }}</button>
+    </div>
+  </section>
+
+  <!-- Denúncias Section -->
+  <section class="denuncias-section">
+    <h2 class="denuncias-title">Minhas denuncias</h2>
+    <div class="cards-grid">
+      <app-denuncias-cards [denunciasFiltradas]="minhasDenuncias"></app-denuncias-cards>
+    </div>
+  </section>
+
+  <!-- Modal simples -->
+  <div class="modal-backdrop" [style.display]="modalAberto ? 'block' : 'none'" (click)="fecharModalEdicao()"></div>
+  <div class="modal-edicao" [style.display]="modalAberto ? 'block' : 'none'">
+    <h2>Editar Dados</h2>
+    <form (submit)="salvarEdicao(); $event.preventDefault();">
+      <div>
+        <label>Telefone</label>
+        <input type="text" [value]="telefoneEdit" (input)="onTelefoneInput($event)">
+      </div>
+      <div>
+        <label>Foto de Perfil</label>
+        <input type="file" (change)="onFotoSelecionada($event)" accept="image/*" />
+        <div style="margin-top:8px;">
+          <img *ngIf="fotoPreview" [src]="getFotoUrl()" alt="Prévia da Foto" class="profile-avatar">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <button type="button" class="btn btn-outline" (click)="fecharModalEdicao()">Cancelar</button>
+    </form>
+  </div>
+</div>
