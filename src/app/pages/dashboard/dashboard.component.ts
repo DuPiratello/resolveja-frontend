@@ -24,6 +24,8 @@ export class DashboardComponent implements OnInit {
   selectedStatus = '';
   selectedTipo = '';
   isOpen: boolean = false;
+  selectedDenuncia: Denuncia | null = null;
+
 
   constructor(
     private authService: AuthService,
@@ -59,8 +61,42 @@ export class DashboardComponent implements OnInit {
       (!this.selectedTipo || normalizeText(d.tipo || '') === normalizeText(this.selectedTipo))
     );
   }
+  
+  atualizarStatus(novoStatus: string) {
+    if (!this.selectedDenuncia) return;
+    const denunciaAtualizada = { ...this.selectedDenuncia, status: novoStatus };
+    this.denunciaService.atualizarDenuncia(denunciaAtualizada).subscribe({
+      next: (data) => {
+        // Atualiza localmente
+        const idx = this.denuncias.findIndex(d => d.id === denunciaAtualizada.id);
+        if (idx > -1) this.denuncias[idx] = denunciaAtualizada;
+        this.filtrarDenuncias();
+        this.selectedDenuncia = denunciaAtualizada;
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar status:', err);
+      }
+    });
+  }
+
   toggleNovaDenuncia() {
     this.isOpen = !this.isOpen; // Alterna entre true e false
+  }
+  
+  abrirDetalhes(denuncia: Denuncia) {
+    this.selectedDenuncia = { ...denuncia };
+  }
+
+  fecharDetalhes() {
+    this.selectedDenuncia = null;
+  }
+
+    get denunciasPendentes() {
+    return this.denuncias.filter(d => d.status === 'pendente');
+  }
+
+    get denunciasResolvidas() {
+    return this.denuncias.filter(d => d.status === 'resolvido');
   }
 
   logout() {

@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-userpage',
   standalone: true,
   templateUrl: './userpage.component.html',
   styleUrls: ['./userpage.component.css'],
@@ -41,6 +41,7 @@ export class UserPageComponent implements OnInit {
         console.log('Denúncias carregadas:', data); // Verifique os dados no console
         this.denuncias = data;
         this.denunciasFiltradas = data;
+        this.denunciasFiltradas = data.slice(0, 12);
       },
       error: (err) => {
         console.error('Erro ao carregar denúncias:', err);
@@ -57,7 +58,7 @@ export class UserPageComponent implements OnInit {
     this.denunciasFiltradas = this.denuncias.filter(d =>
       (!this.selectedStatus || normalizeText(d.status || '') === normalizeText(this.selectedStatus)) &&
       (!this.selectedTipo || normalizeText(d.tipo || '') === normalizeText(this.selectedTipo))
-    );
+    ).slice(0, 12);
   }
 
   novaDenuncia() {
@@ -65,6 +66,17 @@ export class UserPageComponent implements OnInit {
   }
   toggleNovaDenuncia() {
     this.isOpen = !this.isOpen; // Alterna entre true e false
+  }
+
+    get denunciasPendentes() {
+    return this.denuncias.filter(d => d.status === 'pendente');
+  }
+
+  get denunciasResolvidas() {
+    return this.denuncias.filter(d => d.status === 'resolvido');
+  }
+  get denunciasAndamento() {
+  return this.denuncias.filter(d => (d.status || '').toLowerCase() === 'em andamento');
   }
 
   logout() {

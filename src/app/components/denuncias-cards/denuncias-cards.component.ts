@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Denuncia } from '../../models/denuncia'; 
 
 @Component({
@@ -8,12 +8,13 @@ import { Denuncia } from '../../models/denuncia';
 })
 export class DenunciasCardsComponent {
   @Input() denunciasFiltradas!: Denuncia[];
+  @Output() abrir = new EventEmitter<Denuncia>();
 
-getFotoUrl(denuncia: any): string {
-  if (denuncia.fotoUrl) {
-    if (denuncia.fotoUrl.startsWith('http')) return denuncia.fotoUrl;
-    return 'http://localhost:5000' + denuncia.fotoUrl;
+  getFotoUrl(denuncia: any): string {
+    if (denuncia.fotoUrl) {
+      if (denuncia.fotoUrl.startsWith('http')) return denuncia.fotoUrl;
+      return 'http://localhost:5000' + denuncia.fotoUrl;
+    }
+    return 'assets/defaultProfile.png';
   }
-  return 'assets/defaultProfile.png';
-}
 }

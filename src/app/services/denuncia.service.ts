@@ -25,4 +25,11 @@ export class DenunciaService {
   getCoordenadas(): Observable<[number, number, number][]> {
     return this.http.get<[number, number, number][]>(`${this.apiUrl}/coordenadas`);
   }
+  atualizarDenuncia(denuncia: Denuncia): Observable<Denuncia> {
+    return this.http.put<Denuncia>(
+      `${this.apiUrl}/denuncias/${denuncia.id}`,
+      denuncia,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 }

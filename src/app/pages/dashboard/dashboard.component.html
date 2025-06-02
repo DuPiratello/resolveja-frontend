@@ -1,32 +1,230 @@
-<div class="dashboard-container">
-    <button (click)="logout()">Logout</button>
-    <button [routerLink]="'/profile'" class="profile-btn">Meu Perfil</button>
-    <h1>Dashboard</h1>
-
-    <h2>Denúncias</h2>
-
-    <div class="filters">
-      <label for="status">Status:</label>
-      <select id="status" [(ngModel)]="selectedStatus" (change)="filtrarDenuncias()">
-        <option value="">Todos</option>
-        <option value="pendente">Pendente</option>
-        <option value="em andamento">Em Andamento</option>
-        <option value="resolvido">Resolvido</option>
-      </select>
-      
-      <label for="tipo">Tipo:</label>
-      <select id="tipo" [(ngModel)]="selectedTipo" (change)="filtrarDenuncias()">
-        <option value="">Todos</option>
-        <option value="buraco">Buraco</option>
-        <option value="iluminacao">Iluminação</option>
-        <option value="lixo">Lixo</option>
-      </select>
+<div class="dashboard-page">
+  
+  <!-- Header do Dashboard -->
+  <header class="dashboard-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="logo">
+            <span class="logo-icon"></span>
+            <span class="logo-text">Dashboard Administrativo</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button [routerLink]="'/profile'" class="btn btn-outline">
+            <span class="btn-icon">👤</span>
+            Meu Perfil
+          </button>
+          <button (click)="logout()" class="btn btn-primary">
+            <span class="btn-icon">🚪</span>
+            Sair
+          </button>
+        </div>
+      </div>
     </div>
+  </header>
 
+  <!-- Seção de Estatísticas -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ denuncias.length }}</div>
+            <div class="stat-description">Total de Denúncias</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ denunciasPendentes.length }}</div>
+            <div class="stat-description">Pendentes</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ denunciasResolvidas.length }}</div>
+            <div class="stat-description">Resolvidas</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <div class="stat-number">85%</div>
+            <div class="stat-description">Taxa de Resolução</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <app-denuncias-cards
-  [denunciasFiltradas]="denunciasFiltradas">
-</app-denuncias-cards>
+  <!-- Seção de Filtros -->
+  <section class="filters-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Gerenciar Denúncias</h2>
+        <p class="section-description">
+          Filtre e gerencie as denúncias recebidas pelos cidadãos
+        </p>
+      </div>
 
-  <app-graphs></app-graphs>
-  <app-heatmap></app-heatmap>
+      <div class="filters-container">
+        <div class="filter-group">
+          <label for="status" class="filter-label">
+            <span class="filter-icon">📊</span>
+            Status
+          </label>
+          <select 
+            id="status" 
+            [(ngModel)]="selectedStatus" 
+            (change)="filtrarDenuncias()"
+            class="filter-select">
+            <option value="">Todos os Status</option>
+            <option value="pendente">Pendente</option>
+            <option value="em andamento">Em Andamento</option>
+            <option value="resolvido">Resolvido</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="tipo" class="filter-label">
+            <span class="filter-icon">🏷️</span>
+            Tipo
+          </label>
+          <select 
+            id="tipo" 
+            [(ngModel)]="selectedTipo" 
+            (change)="filtrarDenuncias()"
+            class="filter-select">
+            <option value="">Todos os Tipos</option>
+            <option value="buraco">Buraco na Via</option>
+            <option value="iluminacao">Iluminação Pública</option>
+            <option value="lixo">Coleta de Lixo</option>
+          </select>
+        </div>
+
+        <div class="filter-actions">
+          <button 
+            (click)="selectedStatus = ''; selectedTipo = ''; filtrarDenuncias()" 
+            class="btn btn-outline">
+            <span class="btn-icon">🔄</span>
+            Limpar Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Denúncias -->
+  <section class="denuncias-section">
+    <div class="container">
+      <app-denuncias-cards
+        [denunciasFiltradas]="denunciasFiltradas"
+        (abrir)="abrirDetalhes($event)">
+      </app-denuncias-cards>
+    </div>
+  </section>
+
+  <!-- Seção de Análises -->
+  <section class="analytics-section">
+    <div class="container">
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h3 class="analytics-title">
+            <span class="analytics-icon">📈</span>
+            Gráficos e Estatísticas
+          </h3>
+          <app-graphs></app-graphs>
+        </div>
+        
+        <div class="analytics-card">
+          <h3 class="analytics-title">
+            <span class="analytics-icon">🗺️</span>
+            Mapa de Calor
+          </h3>
+          <app-heatmap></app-heatmap>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal de Detalhes -->
+  <div class="modal-overlay" *ngIf="selectedDenuncia" (click)="fecharDetalhes()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <span class="modal-icon">📋</span>
+          Detalhes da Denúncia
+        </h2>
+        <button (click)="fecharDetalhes()" class="modal-close">
+          <span>✕</span>
+        </button>
+      </div>
+
+      <div class="modal-content">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label class="detail-label">ID da Denúncia</label>
+            <div class="detail-value">{{ selectedDenuncia.id }}</div>
+          </div>
+
+          <div class="detail-item">
+            <label class="detail-label">Título</label>
+            <div class="detail-value">{{ selectedDenuncia.titulo }}</div>
+          </div>
+
+          <div class="detail-item full-width">
+            <label class="detail-label">Descrição</label>
+            <div class="detail-value">{{ selectedDenuncia.descricao }}</div>
+          </div>
+
+          <div class="detail-item">
+            <label class="detail-label">Tipo</label>
+            <div class="detail-value">{{ selectedDenuncia.tipo }}</div>
+          </div>
+
+          <div class="detail-item">
+            <label class="detail-label">Status Atual</label>
+            <div class="status-badge" [ngClass]="'status-' + selectedDenuncia.status">
+              <span class="status-text">{{ selectedDenuncia.status }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item full-width">
+            <label class="detail-label">Alterar Status</label>
+            <select [(ngModel)]="selectedDenuncia.status" class="status-select">
+              <option value="pendente">⏳ Pendente</option>
+              <option value="em andamento">🔄 Em Andamento</option>
+              <option value="resolvido">✅ Resolvido</option>
+              <option value="cancelado">❌ Cancelado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button (click)="fecharDetalhes()" class="btn btn-outline">
+          <span class="btn-icon">❌</span>
+          Cancelar
+        </button>
+        <button (click)="atualizarStatus(selectedDenuncia.status)" class="btn btn-solid">
+          <span class="btn-icon">💾</span>
+          Salvar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="dashboard-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="copyright">
+          ©  ResolveJá. Conectando cidadãos e governo para uma cidade melhor.
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>

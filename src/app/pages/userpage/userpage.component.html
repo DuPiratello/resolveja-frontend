@@ -1,40 +1,173 @@
-<div class="dashboard-container">
-    <button (click)="logout()">Logout</button>
-    <button [routerLink]="'/profile'" class="profile-btn">Meu Perfil</button>
-    <h1>Dashboard</h1>
-
-    <h2>Denúncias</h2>
-
-    <div class="filters">
-      <label for="status">Status:</label>
-      <select id="status" [(ngModel)]="selectedStatus" (change)="filtrarDenuncias()">
-        <option value="">Todos</option>
-        <option value="pendente">Pendente</option>
-        <option value="em andamento">Em Andamento</option>
-        <option value="resolvido">Resolvido</option>
-      </select>
-      
-      <label for="tipo">Tipo:</label>
-      <select id="tipo" [(ngModel)]="selectedTipo" (change)="filtrarDenuncias()">
-        <option value="">Todos</option>
-        <option value="buraco">Buraco</option>
-        <option value="iluminacao">Iluminação</option>
-        <option value="lixo">Lixo</option>
-      </select>
+<div class="userpage-container">
+  
+  <!-- Header da UserPage -->
+  <header class="userpage-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="logo">
+            <span class="logo-icon">🏛️</span>
+            <span class="logo-text">ResolveJá</span>
+          </div>
+          <h1 class="page-title">Painel do Cidadão</h1>
+        </div>
+        <div class="header-actions">
+          <button [routerLink]="'/profile'" class="btn btn-outline">
+            <span class="btn-icon">👤</span>
+            Meu Perfil
+          </button>
+          <button (click)="logout()" class="btn btn-primary">
+            <span class="btn-icon">🚪</span>
+            Sair
+          </button>
+        </div>
+      </div>
     </div>
+  </header>
 
-  <!-- Botão que alterna entre "Nova Denúncia" e "Fechar" -->
-  <button (click)="toggleNovaDenuncia()" class="nova-denuncia-btn">
-    {{ isOpen ? 'Fechar' : '+ Nova Denúncia' }}
-  </button>
+  <!-- Seção de Estatísticas Pessoais -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ denuncias.length }}</div>
+            <div class="stat-description">Total de denúncias criadas</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ denunciasPendentes.length }}</div>
+            <div class="stat-description">Pendentes</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔄</div>
+          <div class="stat-content">
+          <div class="stat-number">{{ denunciasAndamento.length }}</div>            <div class="stat-description">Em Andamento</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+           <div class="stat-number">{{ denunciasResolvidas.length }}</div>
+            <div class="stat-description">Resolvidas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Exibe o componente de nova denúncia se isOpen for true -->
-  <div *ngIf="isOpen">
-    <app-nova-denuncia></app-nova-denuncia>
-  </div>
+  <!-- Seção de Filtros e Nova Denúncia -->
+  <section class="filters-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title"> Faça sua Denúncia Já!!!</h2>
+        <p class="section-description">
+          Acompanhe as denúncias mais recentes e registre novos problemas
+        </p>
+      </div>
 
-  <app-denuncias-cards
-  [denunciasFiltradas]="denunciasFiltradas">
-</app-denuncias-cards>
+      <div class="filters-container">
+        <div class="filter-actions">
+         <section class="call-to-action-section">
+            <div class="container">
+              <div class="cta-card">
+                <div class="cta-icon">🚀</div>
+                <div class="cta-message">
+                  <strong>Ajude a transformar sua cidade!</strong><br>
+                  Identificou um problema? <span class="cta-highlight">Registre uma nova denúncia</span> agora mesmo.
+                </div>
+                <button (click)="toggleNovaDenuncia()" class="btn btn-cta">
+                  <span class="btn-icon">
+                    {{ isOpen ? '✖️' : '➕' }}
+                  </span>
+                  {{ isOpen ? 'Fechar' : 'Nova Denúncia' }}
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
 
-  <app-heatmap></app-heatmap>
+      <!-- Formulário de Nova Denúncia -->
+      <div *ngIf="isOpen" class="nova-denuncia-container">
+        <div class="nova-denuncia-header">
+          <h3 class="nova-denuncia-title">
+            <span class="nova-denuncia-icon">📝</span>
+            Registrar Nova Denúncia
+          </h3>
+          <p class="nova-denuncia-description">
+            Preencha os dados abaixo para registrar um novo problema em sua cidade
+          </p>
+        </div>
+        <app-nova-denuncia></app-nova-denuncia>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Denúncias -->
+  <section class="denuncias-section">
+    <div class="container">
+      <div class="denuncias-header">
+        <h3 class="denuncias-title">
+          <span class="denuncias-icon">📋</span>
+          Lista de Denúncias
+        </h3>
+      </div>
+
+      <!-- Denúncias Cards -->
+      <div class="denuncias-wrapper">
+        <app-denuncias-cards
+          [denunciasFiltradas]="denunciasFiltradas">
+        </app-denuncias-cards>
+
+        <!-- Empty State -->
+        <div *ngIf="denunciasFiltradas.length === 0" class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h3 class="empty-title">Nenhuma denúncia encontrada</h3>
+          <p class="empty-description">
+            {{ selectedStatus || selectedTipo ? 
+               'Tente ajustar os filtros para ver mais resultados.' : 
+               'Você ainda não registrou nenhuma denúncia. Que tal começar agora?' }}
+          </p>
+          <button *ngIf="!selectedStatus && !selectedTipo" (click)="toggleNovaDenuncia()" class="btn btn-solid">
+            <span class="btn-icon">➕</span>
+            Registrar Primeira Denúncia
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Mapa de Calor -->
+  <section class="heatmap-section">
+    <div class="container">
+      <div class="heatmap-card">
+        <h3 class="heatmap-title">
+          <span class="heatmap-icon">🗺️</span>
+          Mapa de Problemas da Cidade
+        </h3>
+        <p class="heatmap-description">
+          Visualize os problemas reportados em toda a cidade
+        </p>
+        <div class="heatmap-wrapper">
+          <app-heatmap></app-heatmap>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="userpage-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="copyright">
+          © 2024 ResolveJá. Sua voz faz a diferença na cidade.
+        </p>
+      </div>
+    </div>
+  </footer>
+</div>

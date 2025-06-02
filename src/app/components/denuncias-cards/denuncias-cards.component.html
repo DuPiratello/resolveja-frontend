@@ -4,7 +4,7 @@
   
     <div class="cards-grid">
         @for (denuncia of denunciasFiltradas; track $index) {
-            <div class="denuncia-card">
+            <div class="denuncia-card" (click)="abrir.emit(denuncia)">
                 <h3 class="card-header">“{{ denuncia.titulo }}”</h3>
                 <div class="card-body">
                 <img id="card-avatar" [src]="getFotoUrl(denuncia)" alt="card-avatar" class="card-avatar"/>
