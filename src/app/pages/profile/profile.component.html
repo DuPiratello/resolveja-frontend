@@ -35,7 +35,7 @@
         <label>Foto de Perfil</label>
         <input type="file" (change)="onFotoSelecionada($event)" accept="image/*" />
         <div style="margin-top:8px;">
-          <img *ngIf="fotoPreview" [src]="getFotoUrl()" alt="Prévia da Foto" class="profile-avatar">
+          <img [src]="fotoPreview ? fotoPreview : getFotoUrl()" alt="Prévia da Foto" class="profile-avatar">
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Salvar</button>

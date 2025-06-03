@@ -1,68 +1,156 @@
 <div class="report-container">
+  <div class="report-header">
+    <div class="header-icon">📝</div>
     <h1 class="report-title">Nova Denúncia</h1>
+    <p class="report-subtitle">Registre um problema em sua cidade e ajude a melhorar nossa comunidade</p>
+  </div>
+  
+  <form class="report-form" (ngSubmit)="submitDenuncia()">
+    <!-- Título da Denúncia -->
+    <div class="form-group">
+      <label for="titulo" class="form-label">
+        <span class="label-icon">📋</span>
+        Título da Denúncia
+        <span class="required">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="titulo" 
+        name="titulo" 
+        [(ngModel)]="denuncia.titulo" 
+        required
+        placeholder="Ex: Buraco na rua principal"
+        class="form-input"
+      >
+    </div>
     
-    <form class="report-form" (ngSubmit)="submitDenuncia()">
-      <div class="form-group">
-        <label for="titulo">Título da Denúncia</label>
-        <input 
-          type="text" 
-          id="titulo" 
-          name="titulo" 
-          [(ngModel)]="denuncia.titulo" 
-          required
-          placeholder="Ex: Buraco na rua principal"
-        >
-      </div>
-      
-      <div class="form-group">
-        <label for="tipo">Tipo de Problema</label>
-        <select 
-          id="tipo" 
-          name="tipo" 
-          [(ngModel)]="denuncia.tipo" 
-          required
-        >
-          <option value="" disabled selected>Selecione um tipo</option>
-          <option value="buraco">Buraco</option>
-          <option value="iluminacao">Iluminação</option>
-          <option value="lixo">Lixo</option>
-        </select>
-      </div>
+    <!-- Tipo de Problema -->
+    <div class="form-group">
+      <label for="tipo" class="form-label">
+        <span class="label-icon">🏷️</span>
+        Tipo de Problema
+        <span class="required">*</span>
+      </label>
+      <select 
+        id="tipo" 
+        name="tipo" 
+        [(ngModel)]="denuncia.tipo" 
+        required
+        class="form-select"
+      >
+        <option value="" disabled selected>Selecione um tipo</option>
+        <option value="buraco">🕳️ Buraco na Via</option>
+        <option value="iluminacao">💡 Iluminação Pública</option>
+        <option value="lixo">🗑️ Coleta de Lixo</option>
+      </select>
+    </div>
 
-      <div class="form-group">
-        <label for="descricao">Descrição</label>
-        <textarea 
-          id="descricao" 
-          name="descricao" 
-          [(ngModel)]="denuncia.descricao" 
-          placeholder="Descreva o problema detalhadamente"
-        ></textarea>
-      </div>
+    <!-- Descrição -->
+    <div class="form-group">
+      <label for="descricao" class="form-label">
+        <span class="label-icon">📝</span>
+        Descrição Detalhada
+      </label>
+      <textarea 
+        id="descricao" 
+        name="descricao" 
+        [(ngModel)]="denuncia.descricao" 
+        placeholder="Descreva o problema detalhadamente. Quanto mais informações, melhor será o atendimento."
+        class="form-textarea"
+        rows="4"
+      ></textarea>
+    </div>
+    
+    <!-- Upload de Imagem -->
+    <div class="form-group">
+      <label for="imagem" class="form-label">
+        <span class="label-icon">📷</span>
+        Adicionar Imagem
+        <span class="optional">(Opcional)</span>
+      </label>
       
-      <div class="form-group">
-        <label for="imagem">Adicionar Imagem (Opcional)</label>
+      <div class="file-upload-container">
         <input 
           type="file" 
           id="imagem" 
           name="imagem" 
           (change)="onFileSelected($event)"
           accept="image/*"
+          class="file-input"
         >
-        
-        <div class="image-preview" *ngIf="imagePreview">
-          <img [src]="imagePreview" alt="Pré-visualização da imagem">
-          <button type="button" class="remove-btn" (click)="removeImage()">×</button>
+        <label for="imagem" class="file-upload-label">
+          <span class="upload-icon">📁</span>
+          <span class="upload-text">Clique para selecionar uma imagem</span>
+          <span class="upload-hint">PNG, JPG até 5MB</span>
+        </label>
+      </div>
+      
+      <div class="image-preview-container" [class.show]="imagePreview">
+        <div class="image-preview">
+          <img [src]="imagePreview" alt="Pré-visualização da imagem" class="preview-image">
+          <button type="button" class="remove-btn" (click)="removeImage()">
+            <span class="remove-icon">✕</span>
+          </button>
         </div>
       </div>
-      <div class="map-container">
-        <app-mapa 
-        (localConfirmadoEvent)="atualizarCoordenadas($event)"
-        (localResetEvent)="resetLocalConfirmado()"></app-mapa>
-      </div>
+    </div>
 
+    <!-- Mapa -->
+    <div class="form-group">
+      <label class="form-label">
+        <span class="label-icon">📍</span>
+        Localização do Problema
+        <span class="required">*</span>
+      </label>
+      <div class="map-container">
+        <div class="map-header">
+          <h3 class="map-title">Marque o local exato do problema</h3>
+          <p class="map-description">Clique no mapa para definir a localização precisa</p>
+        </div>
+        <div class="map-wrapper">
+          <app-mapa 
+            (localConfirmadoEvent)="atualizarCoordenadas($event)"
+            (localResetEvent)="resetLocalConfirmado()">
+          </app-mapa>
+        </div>
+        <div class="location-status" [class.confirmed]="localConfirmado">
+          <span class="status-icon">{{ localConfirmado ? '✅' : '📍' }}</span>
+          <span class="status-text">
+            {{ localConfirmado ? 'Localização confirmada' : 'Clique no mapa para confirmar a localização' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão de Envio -->
+    <div class="form-actions">
       <button 
-      type="submit" 
-      class="submit-btn" 
-      [disabled]="!denuncia.titulo || !denuncia.tipo || !localConfirmado">Enviar Denúncia</button>
-    </form>
-  </div>
+        type="submit" 
+        class="submit-btn" 
+        [disabled]="!denuncia.titulo || !denuncia.tipo || !localConfirmado"
+        [class.disabled]="!denuncia.titulo || !denuncia.tipo || !localConfirmado"
+      >
+        <span class="btn-icon">🚀</span>
+        <span class="btn-text">Enviar Denúncia</span>
+      </button>
+      
+      <div class="form-requirements">
+        <p class="requirements-title">Campos obrigatórios:</p>
+        <div class="requirements-list">
+          <div class="requirement-item" [class.completed]="denuncia.titulo">
+            <span class="requirement-icon">{{ denuncia.titulo ? '✅' : '⭕' }}</span>
+            <span class="requirement-text">Título da denúncia</span>
+          </div>
+          <div class="requirement-item" [class.completed]="denuncia.tipo">
+            <span class="requirement-icon">{{ denuncia.tipo ? '✅' : '⭕' }}</span>
+            <span class="requirement-text">Tipo de problema</span>
+          </div>
+          <div class="requirement-item" [class.completed]="localConfirmado">
+            <span class="requirement-icon">{{ localConfirmado ? '✅' : '⭕' }}</span>
+            <span class="requirement-text">Localização no mapa</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,20 +1,61 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Denuncia } from '../../models/denuncia'; 
+import { Component, Input, Output, EventEmitter } from "@angular/core"
+import type { Denuncia } from "../../models/denuncia"
 
 @Component({
-  selector: 'app-denuncias-cards',
-  templateUrl: './denuncias-cards.component.html',
-  styleUrls: ['./denuncias-cards.component.css']
+  selector: "app-denuncias-cards",
+  templateUrl: "./denuncias-cards.component.html",
+  styleUrls: ["./denuncias-cards.component.css"],
 })
 export class DenunciasCardsComponent {
-  @Input() denunciasFiltradas!: Denuncia[];
-  @Output() abrir = new EventEmitter<Denuncia>();
+  @Input() denunciasFiltradas!: Denuncia[]
+  @Output() abrir = new EventEmitter<Denuncia>()
 
   getFotoUrl(denuncia: any): string {
     if (denuncia.fotoUrl) {
-      if (denuncia.fotoUrl.startsWith('http')) return denuncia.fotoUrl;
-      return 'http://localhost:5000' + denuncia.fotoUrl;
+      if (denuncia.fotoUrl.startsWith("http")) return denuncia.fotoUrl
+      return "http://localhost:5000" + denuncia.fotoUrl
     }
-    return 'assets/defaultProfile.png';
+    return "assets/defaultProfile.png"
+  }
+
+  // Métodos auxiliares para o novo design
+  onImageError(event: any): void {
+    event.target.src = "assets/defaultProfile.png"
+  }
+
+  getStatusClass(status: string): string {
+    return `status-${status.replace(/\s+/g, "-").toLowerCase()}`
+  }
+
+  getStatusIcon(status: string): string {
+    switch (status?.toLowerCase()) {
+      case "pendente":
+        return "⏳"
+      case "em andamento":
+        return "🔄"
+      case "resolvido":
+        return "✅"
+      case "cancelado":
+        return "❌"
+      default:
+        return "📋"
+    }
+  }
+
+  getTipoIcon(tipo: string): string {
+    switch (tipo?.toLowerCase()) {
+      case "buraco":
+        return "🕳️"
+      case "iluminacao":
+      case "iluminação":
+        return "💡"
+      case "lixo":
+        return "🗑️"
+      case "poluição":
+      case "poluicao":
+        return "🚌"
+      default:
+        return "📋"
+    }
   }
 }

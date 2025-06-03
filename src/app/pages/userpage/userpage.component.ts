@@ -41,7 +41,7 @@ export class UserPageComponent implements OnInit {
         console.log('Denúncias carregadas:', data); // Verifique os dados no console
         this.denuncias = data;
         this.denunciasFiltradas = data;
-        this.denunciasFiltradas = data.slice(0, 12);
+        this.denunciasFiltradas = data.slice(0, 6);
       },
       error: (err) => {
         console.error('Erro ao carregar denúncias:', err);
@@ -58,7 +58,7 @@ export class UserPageComponent implements OnInit {
     this.denunciasFiltradas = this.denuncias.filter(d =>
       (!this.selectedStatus || normalizeText(d.status || '') === normalizeText(this.selectedStatus)) &&
       (!this.selectedTipo || normalizeText(d.tipo || '') === normalizeText(this.selectedTipo))
-    ).slice(0, 12);
+    ).slice(0, 6);
   }
 
   novaDenuncia() {
@@ -69,11 +69,11 @@ export class UserPageComponent implements OnInit {
   }
 
     get denunciasPendentes() {
-    return this.denuncias.filter(d => d.status === 'pendente');
+    return this.denuncias.filter(d => d.status === 'pendente' || d.status === 'Pendente');
   }
 
   get denunciasResolvidas() {
-    return this.denuncias.filter(d => d.status === 'resolvido');
+    return this.denuncias.filter(d => d.status === 'resolvido' || d.status === 'Resolvido');
   }
   get denunciasAndamento() {
   return this.denuncias.filter(d => (d.status || '').toLowerCase() === 'em andamento');

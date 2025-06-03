@@ -1,21 +1,78 @@
 <div class="denuncias-wrapper">
-    <h2 class="denuncias-title">Denúncias</h2>
-    <p class="denuncias-subtitle">Sua voz transforma a cidade.</p>
-  
+  <div class="denuncias-header">
+    <h2 class="denuncias-title">
+      <span class="title-icon">📋</span>
+      Denúncias
+    </h2>
+    <p class="denuncias-subtitle">
+      <span class="subtitle-icon">🗣️</span>
+      Sua voz transforma a cidade.
+    </p>
+  </div>
+
+  <div class="cards-container">
     <div class="cards-grid">
-        @for (denuncia of denunciasFiltradas; track $index) {
-            <div class="denuncia-card" (click)="abrir.emit(denuncia)">
-                <h3 class="card-header">“{{ denuncia.titulo }}”</h3>
-                <div class="card-body">
-                <img id="card-avatar" [src]="getFotoUrl(denuncia)" alt="card-avatar" class="card-avatar"/>
-                <div class="card-info">
-                    <div style="opacity: 50%;">status</div>
-                    <span class="status-label">{{ denuncia.status }}</span>
-                    <span class="status-desc">{{ denuncia.descricao }}</span>
-                </div>
-                </div>
+      @for (denuncia of denunciasFiltradas; track $index) {
+        <div class="denuncia-card" (click)="abrir.emit(denuncia)">
+          <!-- Card Header -->
+          <div class="card-header">
+            <div class="card-id">#{{ denuncia.id || ($index + 1) }}</div>
+            <div class="card-type">
+              <span class="type-icon">{{ getTipoIcon(denuncia.tipo) }}</span>
             </div>
-        }
+          </div>
+
+          <!-- Card Title -->
+          <h3 class="card-title">{{ denuncia.titulo }}</h3>
+
+          <!-- Card Body -->
+          <div class="card-body">
+            <div class="card-image-container">
+              <img 
+                [src]="getFotoUrl(denuncia)" 
+                alt="Foto da denúncia" 
+                class="card-avatar"
+                (error)="onImageError($event)"
+              />
+            </div>
+            
+            <div class="card-info">
+              <div class="status-container">
+                <label class="status-label">Status</label>
+                <div class="status-badge {{ getStatusClass(denuncia.status) }}">
+                  <span class="status-icon">{{ getStatusIcon(denuncia.status) }}</span>
+                  <span class="status-text">{{ denuncia.status }}</span>
+                </div>
+              </div>
+              
+              <div class="description-container">
+                <label class="description-label">Descrição</label>
+                <p class="status-desc">{{ denuncia.descricao }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer -->
+          <div class="card-footer">
+            <button class="card-action-btn">
+                <span class="action-icon">🔍</span>
+              <span class="action-text">Ver Detalhes</span>
+            </button>
+          </div>
+
+          <!-- Card Hover Effect -->
+          <div class="card-hover-effect"></div>
+        </div>
+      }
+    </div>
+
+    <!-- Empty State - sempre presente, mas oculto via CSS -->
+    <div class="empty-state" [class.show]="denunciasFiltradas.length === 0">
+      <div class="empty-icon">🔍</div>
+      <h3 class="empty-title">Nenhuma denúncia encontrada</h3>
+      <p class="empty-description">
+        Não há denúncias para exibir no momento.
+      </p>
     </div>
   </div>
-  
+</div>

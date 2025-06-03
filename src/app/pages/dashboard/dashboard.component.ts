@@ -92,7 +92,7 @@ export class DashboardComponent implements OnInit {
   }
 
     get denunciasPendentes() {
-    return this.denuncias.filter(d => d.status === 'pendente');
+    return this.denuncias.filter(d => d.status === 'pendente' || d.status === 'Pendente');
   }
 
     get denunciasResolvidas() {
