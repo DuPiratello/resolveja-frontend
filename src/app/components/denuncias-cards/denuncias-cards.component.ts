@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core"
 import type { Denuncia } from "../../models/denuncia"
-
 @Component({
   selector: "app-denuncias-cards",
   templateUrl: "./denuncias-cards.component.html",
@@ -9,6 +8,7 @@ import type { Denuncia } from "../../models/denuncia"
 export class DenunciasCardsComponent {
   @Input() denunciasFiltradas!: Denuncia[]
   @Output() abrir = new EventEmitter<Denuncia>()
+  
 
   getFotoUrl(denuncia: any): string {
     if (denuncia.fotoUrl) {
@@ -58,4 +58,14 @@ export class DenunciasCardsComponent {
         return "📋"
     }
   }
+
+  getNomeUsuario(denuncia: any): string {
+  return (
+    denuncia.usuario?.nome ||
+    denuncia.usuario?.username ||
+    denuncia.usuario?.name ||
+    'Usuário desconhecido'
+  );
+}
+  
 }
