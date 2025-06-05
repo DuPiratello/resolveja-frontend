@@ -1,12 +1,16 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core"
 import type { Denuncia } from "../../models/denuncia"
+import { NgIf } from "@angular/common"
 @Component({
   selector: "app-denuncias-cards",
   templateUrl: "./denuncias-cards.component.html",
   styleUrls: ["./denuncias-cards.component.css"],
+  imports: [NgIf],
+  standalone: true 
 })
 export class DenunciasCardsComponent {
   @Input() denunciasFiltradas!: Denuncia[]
+  @Input() showDetailsButton: boolean = false
   @Output() abrir = new EventEmitter<Denuncia>()
   
 
