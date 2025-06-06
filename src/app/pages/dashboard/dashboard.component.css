@@ -673,6 +673,58 @@
   }
 }
 
+/* Estilo para imagem pequena e efeito de expansão */
+.detail-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.detail-image-label{
+  text-align: center;
+}
+
+.detail-image {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.detail-image:hover {
+  box-shadow: 0 0 8px #aaa;
+}
+
+/* Modal de imagem expandida */
+.img-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-modal-content {
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-shadow: 0 0 24px #0008;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.img-modal-content img {
+  max-width: 80vw;
+  max-height: 80vh;
+  border-radius: 8px;
+}
+
 /* Estados de foco para acessibilidade */
 .btn:focus-visible,
 .filter-select:focus-visible,

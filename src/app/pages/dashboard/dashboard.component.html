@@ -192,6 +192,12 @@
               <span class="status-text">{{ selectedDenuncia.status }}</span>
             </div>
           </div>
+          <div class="detail-item full-width">
+            <label class="detail-label">Coordenadas</label>
+            <div class="detail-value">
+              {{ selectedDenuncia.endereco }}
+            </div>
+          </div>
 
           <div class="detail-item full-width">
             <label class="detail-label">Alterar Status</label>
@@ -204,6 +210,28 @@
           </div>
         </div>
       </div>
+        <div class="detail-item full-width" *ngIf="selectedDenuncia.reportFotoUrl || selectedDenuncia.reportFotoUrl">
+          <label class="detail-image-label">Imagem da Denúncia</label>
+          <div class="detail-image-container">
+            <img 
+              [src]="'http://127.0.0.1:5000' + (selectedDenuncia.reportFotoUrl || selectedDenuncia.reportFotoUrl)" 
+              alt="Imagem da denúncia" 
+              class="detail-image"
+              (click)="imagemExpandida = true"
+            />
+          </div>
+        </div>
+
+        <!-- Modal de imagem expandida -->
+        <div class="img-modal-overlay" *ngIf="imagemExpandida" (click)="imagemExpandida = false">
+          <div class="img-modal-content" (click)="$event.stopPropagation()">
+            <img 
+              [src]="'http://127.0.0.1:5000' + (selectedDenuncia.reportFotoUrl || selectedDenuncia.reportFotoUrl)" 
+              alt="Imagem expandida"
+            />
+            <button class="btn btn-outline" style="margin-top:16px" (click)="imagemExpandida = false">Fechar</button>
+          </div>
+        </div>
 
       <div class="modal-actions">
         <button (click)="fecharDetalhes()" class="btn btn-outline">

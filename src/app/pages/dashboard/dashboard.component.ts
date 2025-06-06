@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit {
   selectedTipo = '';
   isOpen: boolean = false;
   selectedDenuncia: Denuncia | null = null;
+  imagemExpandida = false;
+
 
 
   constructor(
@@ -98,7 +100,7 @@ export class DashboardComponent implements OnInit {
     get denunciasResolvidas() {
     return this.denuncias.filter(d => d.status === 'resolvido');
   }
-  
+
   getReportFotoUrl(denuncia: any): string {
     if (denuncia.reportFotoUrl) {
       if (denuncia.reportFotoUrl.startsWith("http")) return denuncia.reportFotoUrl
