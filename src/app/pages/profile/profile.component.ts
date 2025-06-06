@@ -120,4 +120,13 @@ export class ProfileComponent implements OnInit {
     return 'assets/defaultProfile.png';
   }
   
+  
+getDenunciasPorStatus(status: string): Denuncia[] {
+  const normalizeText = (text: string) =>
+    text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+  
+  return this.minhasDenuncias.filter(d => 
+    normalizeText(d.status || '') === normalizeText(status)
+  );
+}
 }

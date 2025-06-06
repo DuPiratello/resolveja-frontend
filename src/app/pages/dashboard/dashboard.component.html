@@ -188,7 +188,7 @@
 
           <div class="detail-item">
             <label class="detail-label">Status Atual</label>
-            <div class="status-badge" [ngClass]="'status-' + selectedDenuncia.status">
+            <div class="status-badge" [ngClass]="'status-' + selectedDenuncia.status.replace(' ', '-').toLowerCase()">
               <span class="status-text">{{ selectedDenuncia.status }}</span>
             </div>
           </div>

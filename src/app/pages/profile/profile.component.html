@@ -1,45 +1,204 @@
-<div class="profile-container">
-  <!-- Foto de perfil no canto superior direito -->
-  <div style="position:absolute;top:24px;right:32px;z-index:10;">
-    <img [src]="getFotoUrl()" alt="Foto de Perfil" class="profile-avatar">
-  </div>
-
-  <!-- Hero Section -->
-  <section class="hero">
+<div class="profile-page">
+  
+  <!-- Header do Perfil -->
+  <header class="profile-header">
     <div class="container">
-      <h1 class="title">{{nomeUsuario}}</h1>
-      <p class="subtitle">Ajudando a cidade!</p>
-      <button class="btn btn-primary" (click)="abrirModalEdicao()">Alterar Dados</button>
-      <button class="btn btn-outline" [routerLink]="isAdmin ? '/dashboard' : '/userpage'">{{ isAdmin ? 'Voltar para o Dashboard' : 'Voltar para página inicial' }}</button>
-    </div>
-  </section>
-
-  <!-- Denúncias Section -->
-  <section class="denuncias-section">
-    <h2 class="denuncias-title">Minhas denuncias</h2>
-    <div class="cards-grid">
-      <app-denuncias-cards [denunciasFiltradas]="minhasDenuncias"></app-denuncias-cards>
-    </div>
-  </section>
-
-  <!-- Modal simples -->
-  <div class="modal-backdrop" [style.display]="modalAberto ? 'block' : 'none'" (click)="fecharModalEdicao()"></div>
-  <div class="modal-edicao" [style.display]="modalAberto ? 'block' : 'none'">
-    <h2>Editar Dados</h2>
-    <form (submit)="salvarEdicao(); $event.preventDefault();">
-      <div>
-        <label>Telefone</label>
-        <input type="text" [value]="telefoneEdit" (input)="onTelefoneInput($event)">
-      </div>
-      <div>
-        <label>Foto de Perfil</label>
-        <input type="file" (change)="onFotoSelecionada($event)" accept="image/*" />
-        <div style="margin-top:8px;">
-          <img [src]="fotoPreview ? fotoPreview : getFotoUrl()" alt="Prévia da Foto" class="profile-avatar">
+      <div class="header-content">
+        <div class="profile-info">
+          <div class="profile-avatar-container">
+            <img [src]="getFotoUrl()" alt="Foto de Perfil" class="profile-avatar-large">
+            <button class="avatar-edit-btn" (click)="abrirModalEdicao()" title="Editar foto">
+              <span class="edit-icon">📷</span>
+            </button>
+          </div>
+          <div class="profile-details">
+            <h1 class="profile-name">{{ nomeUsuario }}</h1>
+            <p class="profile-subtitle">
+              <span class="subtitle-icon">🏛️</span>
+              {{ isAdmin ? 'Administrador' : 'Cidadão Ativo' }}
+            </p>
+            <div class="profile-badges">
+              <span class="badge badge-primary">
+                <span class="badge-icon">✨</span>
+                Ajudando a cidade
+              </span>
+              <span class="badge badge-success" *ngIf="minhasDenuncias.length > 0">
+                <span class="badge-icon">📝</span>
+                {{ minhasDenuncias.length }} denúncia{{ minhasDenuncias.length !== 1 ? 's' : '' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" (click)="abrirModalEdicao()">
+            <span class="btn-icon">✏️</span>
+            Editar Perfil
+          </button>
+          <button class="btn btn-primary" [routerLink]="isAdmin ? '/dashboard' : '/userpage'">
+            <span class="btn-icon">{{ isAdmin ? '📊' : '🏠' }}</span>
+            {{ isAdmin ? 'Dashboard' : 'Página Inicial' }}
+          </button>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Salvar</button>
-      <button type="button" class="btn btn-outline" (click)="fecharModalEdicao()">Cancelar</button>
-    </form>
+    </div>
+  </header>
+
+  <!-- Seção de Estatísticas Pessoais -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ minhasDenuncias.length }}</div>
+            <div class="stat-description">Total de Denúncias</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ getDenunciasPorStatus('pendente').length }}</div>
+            <div class="stat-description">Pendentes</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ getDenunciasPorStatus('resolvido').length }}</div>
+            <div class="stat-description">Resolvidas</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔄</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ getDenunciasPorStatus('em andamento').length }}</div>
+            <div class="stat-description">Em Andamento</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Denúncias -->
+  <section class="denuncias-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Minhas Denúncias</h2>
+        <p class="section-description">
+          Acompanhe o status das suas denúncias enviadas
+        </p>
+      </div>
+
+      <div class="denuncias-content" *ngIf="minhasDenuncias.length > 0; else noDenuncias">
+        <app-denuncias-cards [denunciasFiltradas]="minhasDenuncias"></app-denuncias-cards>
+      </div>
+
+      <ng-template #noDenuncias>
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <h3 class="empty-title">Nenhuma denúncia encontrada</h3>
+          <p class="empty-description">
+            Você ainda não fez nenhuma denúncia. Que tal começar a ajudar sua cidade?
+          </p>
+          <button class="btn btn-primary" [routerLink]="'/userpage'">
+            <span class="btn-icon">➕</span>
+            Fazer Primeira Denúncia
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Modal de Edição -->
+  <div class="modal-overlay" *ngIf="modalAberto" (click)="fecharModalEdicao()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <span class="modal-icon">✏️</span>
+          Editar Perfil
+        </h2>
+        <button (click)="fecharModalEdicao()" class="modal-close">
+          <span>✕</span>
+        </button>
+      </div>
+
+      <form (submit)="salvarEdicao(); $event.preventDefault();" class="modal-form">
+        <div class="modal-content">
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span class="section-icon">📱</span>
+              Informações de Contato
+            </h3>
+            
+            <div class="form-group">
+              <label for="telefone" class="form-label">
+                <span class="label-icon">📞</span>
+                Telefone
+              </label>
+              <input 
+                id="telefone"
+                type="tel" 
+                [value]="telefoneEdit" 
+                (input)="onTelefoneInput($event)"
+                class="form-input"
+                placeholder="(00) 00000-0000"
+                maxlength="15">
+              <small class="form-help">Formato: (00) 00000-0000</small>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span class="section-icon">📷</span>
+              Foto de Perfil
+            </h3>
+            
+            <div class="form-group">
+              <label for="foto" class="form-label">Escolher nova foto</label>
+              <div class="photo-upload-container">
+                <div class="photo-preview">
+                  <img 
+                    [src]="fotoPreview ? fotoPreview : getFotoUrl()"  
+                    class="preview-image">
+                  <div class="photo-overlay">
+                    <span class="upload-icon">📷</span>
+                    <span class="upload-text">Clique para alterar</span>
+                  </div>
+                </div>
+                <input 
+                  id="foto"
+                  type="file" 
+                  (change)="onFotoSelecionada($event)" 
+                  accept="image/*"
+                  class="file-input">
+              </div>
+              <small class="form-help">Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" (click)="fecharModalEdicao()">
+            <span class="btn-icon">❌</span>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-solid">
+            <span class="btn-icon">💾</span>
+            Salvar Alterações
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="profile-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="copyright">
+          © ResolveJá. Conectando cidadãos e governo para uma cidade melhor.
+        </p>
+      </div>
+    </div>
+  </footer>
 </div>
