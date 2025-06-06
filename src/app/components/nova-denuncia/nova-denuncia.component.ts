@@ -23,7 +23,8 @@ export class NovaDenunciaComponent {
     endereco: '',
     descricao: '',
     usuarioFotoUrl: '',
-    usuario: null
+    usuario: null,
+    reportFotoUrl: null // Adicionando a propriedade fotoUrl
   };
   
   imagePreview: string | ArrayBuffer | null = null;
@@ -55,17 +56,18 @@ export class NovaDenunciaComponent {
   }
 
   submitDenuncia() {
-    console.log('Dados enviados:', this.denuncia); // Log para verificar os dados
+    const formData = new FormData();
+    formData.append('titulo', this.denuncia.titulo);
+    formData.append('tipo', this.denuncia.tipo);
+    formData.append('status', this.denuncia.status);
+    formData.append('endereco', this.denuncia.endereco);
+    formData.append('descricao', this.denuncia.descricao);
 
-    const denuncia = {
-      titulo: this.denuncia.titulo,
-      tipo: this.denuncia.tipo,
-      status: this.denuncia.status,
-      endereco: this.denuncia.endereco, // Coordenadas
-      descricao: this.denuncia.descricao // Descrição
-    };
+    if (this.selectedFile) {
+      formData.append('foto', this.selectedFile);
+    }
 
-    this.denunciaService.criarDenuncia(denuncia).subscribe({
+    this.denunciaService.criarDenuncia(formData).subscribe({
       next: (denunciaCriada) => {
         this.denunciaSubmitted.emit(denunciaCriada);
         this.resetForm();
@@ -83,13 +85,9 @@ export class NovaDenunciaComponent {
     const formData = new FormData();
     formData.append('titulo', titulo);
     formData.append('tipo', tipo);
-    const denuncia: Partial<Denuncia> = {
-      titulo: titulo,
-      tipo: tipo,
-      status: 'Pendente',
-      endereco: this.denuncia.endereco, // Coordenadas
-    };
-    this.denunciaService.criarDenuncia(denuncia).subscribe({
+    formData.append('status', 'Pendente'); // Status padrão
+    formData.append('endereco', this.denuncia.endereco); // Coordenadas 
+    this.denunciaService.criarDenuncia(formData).subscribe({
       next: (novaDenuncia) => {
         console.log('Denúncia criada:', novaDenuncia);
         // Atualize a lista de denúncias ou redirecione o usuário
@@ -109,7 +107,8 @@ export class NovaDenunciaComponent {
     endereco: '',
     descricao: '',
     usuarioFotoUrl: '',
-    usuario: null
+    usuario: null,
+    reportFotoUrl: null // Resetando a fotoUrl
   };
     this.removeImage();
   }

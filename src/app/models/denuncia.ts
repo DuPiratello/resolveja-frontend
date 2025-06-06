@@ -5,6 +5,7 @@ export interface Denuncia {
     status: string;
     endereco: string;
     usuarioFotoUrl: any;
+    reportFotoUrl?: any;
     usuario: {
         id: number;
         nome: string;

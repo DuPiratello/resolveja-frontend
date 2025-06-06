@@ -11,10 +11,9 @@ export class DenunciaService {
 
   constructor(private http: HttpClient) { }
 
-  criarDenuncia(denuncia: Partial<Denuncia>): Observable<Denuncia> {
-    return this.http.post<Denuncia>(`${this.apiUrl}/denuncias`, denuncia, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+  criarDenuncia(denuncia: FormData): Observable<Denuncia> {
+    
+    return this.http.post<Denuncia>(`${this.apiUrl}/denuncias`, denuncia);
   }
   getDenuncias(): Observable<Denuncia[]> {
     return this.http.get<Denuncia[]>(`${this.apiUrl}/denuncias`);

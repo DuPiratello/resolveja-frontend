@@ -98,6 +98,15 @@ export class DashboardComponent implements OnInit {
     get denunciasResolvidas() {
     return this.denuncias.filter(d => d.status === 'resolvido');
   }
+  
+  getReportFotoUrl(denuncia: any): string {
+    if (denuncia.reportFotoUrl) {
+      if (denuncia.reportFotoUrl.startsWith("http")) return denuncia.reportFotoUrl
+      return "http://localhost:5000" + denuncia.reportFotoUrl
+    }
+    return "assets/defaultProfile.png"
+  }
+
 
   logout() {
     this.authService.logout();

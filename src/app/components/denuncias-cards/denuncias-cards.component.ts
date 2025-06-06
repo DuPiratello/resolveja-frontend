@@ -71,5 +71,13 @@ export class DenunciasCardsComponent {
     'Usuário desconhecido'
   );
 }
+getReportFotoUrl(denuncia: any): string {
+    if (denuncia.reportFotoUrl) {
+      if (denuncia.reportFotoUrl.startsWith("http")) return denuncia.reportFotoUrl
+      return "http://localhost:5000" + denuncia.reportFotoUrl
+    }
+    return "assets/defaultProfile.png"
+  }
+
   
 }
