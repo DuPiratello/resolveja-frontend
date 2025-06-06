@@ -28,11 +28,11 @@ export class HeatmapComponent implements AfterViewInit {
   }
 
   carregarCoordenadas(): void {
-    this.denunciaService.getCoordenadas().subscribe({
+    this.denunciaService.getCoordenadasAtivas().subscribe({
       next: (heatData) => {
-        console.log('Coordenadas carregadas:', heatData);
+        console.log('Coordenadas ativas carregadas:', heatData);
 
-        // Cria o mapa de calor com os dados recebidos
+        // Cria o mapa de calor com os dados recebidos (apenas denúncias não resolvidas/canceladas)
         (L as any).heatLayer(heatData, {
           radius: 25,       // Tamanho do raio de cada ponto
           blur: 15,         // Desfoque entre os pontos
@@ -47,7 +47,28 @@ export class HeatmapComponent implements AfterViewInit {
         }).addTo(this.map);
       },
       error: (err) => {
-        console.error('Erro ao carregar coordenadas:', err);
+        console.error('Erro ao carregar coordenadas ativas:', err);
+        // Fallback para coordenadas originais se o novo endpoint não existir
+        this.denunciaService.getCoordenadas().subscribe({
+          next: (heatData) => {
+            console.log('Usando coordenadas originais como fallback:', heatData);
+            (L as any).heatLayer(heatData, {
+              radius: 25,
+              blur: 15,
+              maxZoom: 10,
+              gradient: {
+                0.4: 'blue',
+                0.6: 'cyan',
+                0.7: 'lime',
+                0.8: 'yellow',
+                1.0: 'red'
+              }
+            }).addTo(this.map);
+          },
+          error: (fallbackErr) => {
+            console.error('Erro ao carregar coordenadas:', fallbackErr);
+          }
+        });
       }
     });
   }

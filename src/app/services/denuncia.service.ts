@@ -32,4 +32,7 @@ export class DenunciaService {
       { headers: { 'Content-Type': 'application/json' } }
     );
   }
+  getCoordenadasAtivas(): Observable<[number, number, number][]> {
+    return this.http.get<[number, number, number][]>(`${this.apiUrl}/coordenadas-ativas`);
+  }
 }

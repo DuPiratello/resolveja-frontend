@@ -47,7 +47,7 @@
                 </div>
               </div>
               
-              <div class="description-container">
+              <div class="description-container" *ngIf="denuncia.descricao && denuncia.descricao.trim()">
                 <label class="description-label">Descrição</label>
                 <p class="status-desc">{{ denuncia.descricao }}</p>
               </div>
