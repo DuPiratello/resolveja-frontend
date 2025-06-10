@@ -1,0 +1,10 @@
+<div class="leaderboard-card">
+  <h3>🏆 Top 5 Usuários (Denúncias Resolvidas)</h3>
+  <div *ngIf="loading">Carregando...</div>
+  <div *ngIf="error">{{ error }}</div>
+  <ol *ngIf="!loading && !error">
+    <li *ngFor="let user of leaderboard">
+      <b>{{ user.username }}</b> — <span>{{ user.resolvidas }}</span> resolvidas
+    </li>
+  </ol>
+</div>

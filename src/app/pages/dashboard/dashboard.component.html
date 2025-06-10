@@ -1,5 +1,6 @@
 <div class="dashboard-page">
   
+  <app-leaderboard></app-leaderboard>
   <!-- Header do Dashboard -->
   <header class="dashboard-header">
     <div class="container">
@@ -99,9 +100,9 @@
             (change)="filtrarDenuncias()"
             class="filter-select">
             <option value="">Todos os Tipos</option>
-            <option value="buraco">Buraco na Via</option>
-            <option value="iluminacao">Iluminação Pública</option>
-            <option value="lixo">Coleta de Lixo</option>
+              <option value="seguranca">Segurança Pública</option>
+              <option value="meio-ambiente">Meio Ambiente</option>
+              <option value="riscos">Riscos de Acidentes</option>
           </select>
         </div>
 

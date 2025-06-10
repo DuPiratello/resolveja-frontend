@@ -26,6 +26,6 @@ export class UsuarioService {
   }
 
   atualizarUsuario(id: string, data: FormData): Observable<Usuario> {
-  return this.http.put<Usuario>(`${this.apiUrl}/${id}`, data);
-}
+    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, data);
+  }
 }

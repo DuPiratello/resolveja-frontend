@@ -34,4 +34,7 @@ export class DenunciaService {
   getCoordenadasAtivas(): Observable<[number, number, number][]> {
     return this.http.get<[number, number, number][]>(`${this.apiUrl}/coordenadas-ativas`);
   }
+  getLeaderboard(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/leaderboard`);
+  }
 }

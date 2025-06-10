@@ -48,16 +48,12 @@ export class DenunciasCardsComponent {
 
   getTipoIcon(tipo: string): string {
     switch (tipo?.toLowerCase()) {
-      case "buraco":
-        return "🕳️"
-      case "iluminacao":
-      case "iluminação":
-        return "💡"
-      case "lixo":
-        return "🗑️"
-      case "poluição":
-      case "poluicao":
-        return "🚌"
+    case 'seguranca': 
+      return '🚨';
+    case 'meio-ambiente': 
+      return '🌱';
+    case 'riscos':
+       return '⚠️';
       default:
         return "📋"
     }

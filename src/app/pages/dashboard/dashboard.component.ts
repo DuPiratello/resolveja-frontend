@@ -9,6 +9,8 @@ import { DenunciasCardsComponent } from '../../components/denuncias-cards/denunc
 import { HeatmapComponent } from '../../components/heatmap/heatmap.component';  
 import { RouterModule } from '@angular/router';
 import { GraphsComponent } from '../../components/graphs/graphs.component';
+import { LeaderboardComponent } from '../../components/leaderboard/leaderboard.component';
+
 
 
 @Component({
@@ -16,7 +18,7 @@ import { GraphsComponent } from '../../components/graphs/graphs.component';
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, RouterModule, FormsModule, DenunciasCardsComponent, HeatmapComponent, GraphsComponent] // Importando o componente de mapa
+  imports: [CommonModule, RouterModule, FormsModule, DenunciasCardsComponent, HeatmapComponent, GraphsComponent, LeaderboardComponent] // Importando o componente de mapa
 })
 export class DashboardComponent implements OnInit {
   denuncias: Denuncia[] = [];
