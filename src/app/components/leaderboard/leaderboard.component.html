@@ -1,10 +1,68 @@
 <div class="leaderboard-card">
   <h3>🏆 Top 5 Usuários (Denúncias Resolvidas)</h3>
-  <div *ngIf="loading">Carregando...</div>
-  <div *ngIf="error">{{ error }}</div>
-  <ol *ngIf="!loading && !error">
-    <li *ngFor="let user of leaderboard">
-      <b>{{ user.username }}</b> — <span>{{ user.resolvidas }}</span> resolvidas
-    </li>
-  </ol>
+  
+  <div class="loading-state" *ngIf="loading">
+    🔄 Carregando leaderboard...
+  </div>
+  
+  <div class="error-state" *ngIf="error">
+    ❌ {{ error }}
+  </div>
+  
+  <div *ngIf="!loading && !error && leaderboard.length > 0">
+    <!-- Podium for Top 3 -->
+    <div class="podium-container">
+      <!-- Second Place -->
+      <div class="podium-place second" *ngIf="leaderboard.length >= 2">
+        <div class="medal">🥈</div>
+        <div class="podium-step">
+          <div class="position-number">2</div>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ leaderboard[1].username }}</div>
+          <div class="user-score">{{ leaderboard[1].resolvidas }} resolvidas</div>
+        </div>
+      </div>
+      
+      <!-- First Place -->
+      <div class="podium-place first" *ngIf="leaderboard.length >= 1">
+        <div class="medal">🥇</div>
+        <div class="podium-step">
+          <div class="position-number">1</div>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ leaderboard[0].username }}</div>
+          <div class="user-score">{{ leaderboard[0].resolvidas }} resolvidas</div>
+        </div>
+      </div>
+      
+      <!-- Third Place -->
+      <div class="podium-place third" *ngIf="leaderboard.length >= 3">
+        <div class="medal">🥉</div>
+        <div class="podium-step">
+          <div class="position-number">3</div>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ leaderboard[2].username }}</div>
+          <div class="user-score">{{ leaderboard[2].resolvidas }} resolvidas</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Remaining Users (4th and 5th place) -->
+    <div class="remaining-users" *ngIf="leaderboard.length > 3">
+      <h4>🎖️ Outros Destaques</h4>
+      <ol>
+        <li *ngFor="let user of leaderboard.slice(3); let i = index">
+          <div class="user-name">{{ user.username }}</div>
+          <div class="user-score">{{ user.resolvidas }} resolvidas</div>
+        </li>
+      </ol>
+    </div>
+  </div>
+  
+  <!-- Fallback quando não há dados -->
+  <div class="no-data" *ngIf="!loading && !error && leaderboard.length === 0">
+    📊 Nenhum dado disponível no momento
+  </div>
 </div>

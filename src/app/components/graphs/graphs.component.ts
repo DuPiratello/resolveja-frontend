@@ -24,16 +24,20 @@ export class GraphsComponent implements AfterViewInit {
   }
 
   drawCharts() {
-    // Inicializa os contadores
-    const tipos: { [key: string]: number } = { 'Buraco': 0, 'Iluminação': 0, 'Lixo': 0 };
+    // Inicializa os contadores para os novos tipos
+    const tipos: { [key: string]: number } = { 
+      'Segurança Pública': 0, 
+      'Meio Ambiente': 0, 
+      'Riscos de Acidentes': 0 
+    };
     const status: { [key: string]: number } = { 'Pendente': 0, 'Em Andamento': 0, 'Resolvido': 0 };
 
     this.denuncias.forEach(d => {
       // Padroniza tipo
       const tipo = (d.tipo || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      if (tipo === 'buraco') tipos['Buraco']++;
-      else if (tipo === 'iluminacao' || tipo === 'iluminacao') tipos['Iluminação']++;
-      else if (tipo === 'lixo') tipos['Lixo']++;
+      if (tipo === 'seguranca' || tipo === 'segurança' || tipo === 'seguranca publica' || tipo === 'segurança pública') tipos['Segurança Pública']++;
+      else if (tipo === 'meio-ambiente' || tipo === 'meio ambiente') tipos['Meio Ambiente']++;
+      else if (tipo === 'riscos' || tipo === 'riscos de acidentes') tipos['Riscos de Acidentes']++;
 
       // Padroniza status
       const stat = (d.status || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -45,9 +49,9 @@ export class GraphsComponent implements AfterViewInit {
     // Gráfico de Pizza
     const pieData = (window as any).google.visualization.arrayToDataTable([
       ['Tipo', 'Quantidade'],
-      ['Buraco', tipos['Buraco']],
-      ['Iluminação', tipos['Iluminação']],
-      ['Lixo', tipos['Lixo']]
+      ['Segurança Pública', tipos['Segurança Pública']],
+      ['Meio Ambiente', tipos['Meio Ambiente']],
+      ['Riscos de Acidentes', tipos['Riscos de Acidentes']]
     ]);
     const pieOptions = { title: 'Denúncias por Tipo', width: 400, height: 300 };
     const pieChart = new (window as any).google.visualization.PieChart(document.getElementById('piechart'));
