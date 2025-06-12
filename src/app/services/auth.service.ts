@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { environment } from '../environment';
+import { getApiUrl } from '../environment';
 
 interface RegisterData {
   username: string;
@@ -32,7 +32,7 @@ export class AuthService {
     }
 }
 
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private apiUrl = `${getApiUrl()}/auth`; // URL dinâmica da API Flask
 
   constructor(private http: HttpClient) {}
 

@@ -1,15 +1,17 @@
 
 export const environment = {
   production: false,
-  apiUrl: getApiUrl()
+  apiUrl: ''
 };
 
-function getApiUrl(): string {
-  // Se estiver em produção (hospedado)
-  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    return 'https://resolveja-backend-134601635282.southamerica-east1.run.app';
-  }
+// Detecta automaticamente o ambiente
+export function getApiUrl(): string {
+  const isLocal = window.location.hostname === 'localhost' || 
+                  window.location.hostname === '127.0.0.1';
   
-  // Se estiver em desenvolvimento (local)
-  return 'http://localhost:5000';
+  if (isLocal) {
+    return 'http://localhost:5000'; // Para desenvolvimento local
+  } else {
+    return 'https://resolveja-backend-134601635282.southamerica-east1.run.app'; // Para produção
+  }
 }

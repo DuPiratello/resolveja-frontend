@@ -10,7 +10,6 @@ import { HeatmapComponent } from '../../components/heatmap/heatmap.component';
 import { RouterModule } from '@angular/router';
 import { GraphsComponent } from '../../components/graphs/graphs.component';
 import { LeaderboardComponent } from '../../components/leaderboard/leaderboard.component';
-import { environment } from '../../environment';
 
 
 
@@ -107,7 +106,7 @@ export class DashboardComponent implements OnInit {
   getReportFotoUrl(denuncia: any): string {
     if (denuncia.reportFotoUrl) {
       if (denuncia.reportFotoUrl.startsWith("http")) return denuncia.reportFotoUrl
-      return environment.apiUrl + denuncia.reportFotoUrl
+      return this.getApiUrl() + denuncia.reportFotoUrl
     }
     return "assets/defaultProfile.png"
   }
@@ -117,4 +116,12 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  getApiUrl(): string {
+    const isLocal = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1';
+
+    return isLocal ? 'http://localhost:5000' : 'https://resolveja-backend-134601635282.southamerica-east1.run.app';
+  }
+
 }

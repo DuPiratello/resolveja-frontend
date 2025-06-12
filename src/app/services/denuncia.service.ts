@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Denuncia } from '../models/denuncia';
-import { environment } from '../environment';
+import { getApiUrl } from '../environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DenunciaService {
-  private apiUrl = `${environment.apiUrl}/api`;
+  private apiUrl = `${getApiUrl()}/api`;
 
   constructor(private http: HttpClient) { }
 
