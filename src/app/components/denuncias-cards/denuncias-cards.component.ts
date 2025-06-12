@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core"
 import type { Denuncia } from "../../models/denuncia"
 import { NgIf } from "@angular/common"
+import { environment } from '../../environment';
+
 @Component({
   selector: "app-denuncias-cards",
   templateUrl: "./denuncias-cards.component.html",
@@ -17,7 +19,7 @@ export class DenunciasCardsComponent {
   getFotoUrl(denuncia: any): string {
     if (denuncia.fotoUrl) {
       if (denuncia.fotoUrl.startsWith("http")) return denuncia.fotoUrl
-      return "http://localhost:5000" + denuncia.fotoUrl
+      return environment.apiUrl + denuncia.fotoUrl
     }
     return "assets/defaultProfile.png"
   }
@@ -70,7 +72,7 @@ export class DenunciasCardsComponent {
 getReportFotoUrl(denuncia: any): string {
     if (denuncia.reportFotoUrl) {
       if (denuncia.reportFotoUrl.startsWith("http")) return denuncia.reportFotoUrl
-      return "http://localhost:5000" + denuncia.reportFotoUrl
+      return environment.apiUrl + denuncia.reportFotoUrl
     }
     return "assets/defaultProfile.png"
   }

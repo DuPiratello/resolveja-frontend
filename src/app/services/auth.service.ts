@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
+import { environment } from '../environment';
 
 interface RegisterData {
   username: string;
@@ -31,7 +32,7 @@ export class AuthService {
     }
 }
 
-  private apiUrl = 'http://localhost:5000/auth'; // URL da API Flask
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient) {}
 

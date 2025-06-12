@@ -10,6 +10,7 @@ import { HeatmapComponent } from '../../components/heatmap/heatmap.component';
 import { RouterModule } from '@angular/router';
 import { GraphsComponent } from '../../components/graphs/graphs.component';
 import { LeaderboardComponent } from '../../components/leaderboard/leaderboard.component';
+import { environment } from '../../environment';
 
 
 
@@ -106,7 +107,7 @@ export class DashboardComponent implements OnInit {
   getReportFotoUrl(denuncia: any): string {
     if (denuncia.reportFotoUrl) {
       if (denuncia.reportFotoUrl.startsWith("http")) return denuncia.reportFotoUrl
-      return "http://localhost:5000" + denuncia.reportFotoUrl
+      return environment.apiUrl + denuncia.reportFotoUrl
     }
     return "assets/defaultProfile.png"
   }
