@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
+import { environment } from './environment';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.getToken()) {
-      this.http.get('http://localhost:5000/auth/protected').subscribe(
+      this.http.get(`${environment.apiUrl}/auth/protected`).subscribe(
         (response) => console.log('✅ Sucesso:', response),
         (error) => console.log('❌ Erro ao acessar API protegida:', error)
       );
