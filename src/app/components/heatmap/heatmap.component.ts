@@ -39,7 +39,7 @@ export class HeatmapComponent implements AfterViewInit {
       // Tenta carregar leaflet.heat dinamicamente
       await this.loadLeafletHeat();
       this.heatLayerLoaded = true;
-      console.log('leaflet.heat carregado com sucesso');
+      console.log('leaflet.heat carregado com sucesso, heatLayer disponível:', !!(L as any).heatLayer);
     } catch (error) {
       console.warn('Não foi possível carregar leaflet.heat:', error);
       this.heatLayerLoaded = false;
@@ -52,21 +52,40 @@ export class HeatmapComponent implements AfterViewInit {
     return new Promise((resolve, reject) => {
       // Verifica se já está carregado
       if ((L as any).heatLayer) {
+        console.log('leaflet.heat já estava carregado');
         resolve();
         return;
       }
 
+      console.log('Carregando leaflet.heat dinamicamente...');
+      
       // Tenta carregar via script tag
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js';
+      
       script.onload = () => {
-        if ((L as any).heatLayer || (window.L && (window.L as any).heatLayer)) {
-          resolve();
-        } else {
-          reject(new Error('heatLayer não encontrado após carregar script'));
-        }
+        console.log('Script leaflet.heat carregado');
+        
+        // Aguarda um pequeno delay para garantir que o plugin seja registrado
+        setTimeout(() => {
+          if ((L as any).heatLayer) {
+            console.log('heatLayer encontrado no objeto L');
+            resolve();
+          } else if (window.L && (window.L as any).heatLayer) {
+            console.log('heatLayer encontrado no window.L');
+            resolve();
+          } else {
+            console.error('heatLayer não encontrado após carregar script');
+            reject(new Error('heatLayer não encontrado após carregar script'));
+          }
+        }, 100);
       };
-      script.onerror = () => reject(new Error('Falha ao carregar script leaflet.heat'));
+      
+      script.onerror = (error) => {
+        console.error('Falha ao carregar script leaflet.heat:', error);
+        reject(new Error('Falha ao carregar script leaflet.heat'));
+      };
+      
       document.head.appendChild(script);
     });
   }
@@ -99,7 +118,11 @@ export class HeatmapComponent implements AfterViewInit {
       return;
     }
 
-    if (this.heatLayerLoaded && (L as any).heatLayer) {
+    console.log('Dados do heatmap:', heatData);
+    console.log('heatLayerLoaded:', this.heatLayerLoaded);
+    console.log('L.heatLayer disponível?', !!(L as any).heatLayer);
+
+    if (this.heatLayerLoaded && (L as any).heatLayer && heatData.length > 0) {
       console.log('Criando mapa de calor com leaflet.heat');
       this.criarMapaDeCalor(heatData);
     } else {
@@ -112,18 +135,36 @@ export class HeatmapComponent implements AfterViewInit {
     if (!this.map) return;
 
     try {
-      (L as any).heatLayer(heatData, {
+      // Converte os dados para o formato correto se necessário
+      const formattedData = heatData.map(point => {
+        if (Array.isArray(point) && point.length >= 2) {
+          return [point[0], point[1], point[2] || 0.5]; // lat, lng, intensity
+        }
+        return [point.latitude || point.lat, point.longitude || point.lng, point.intensity || 0.5];
+      }).filter(point => point[0] && point[1]); // Remove pontos inválidos
+
+      console.log('Dados formatados para heatmap:', formattedData);
+
+      if (formattedData.length === 0) {
+        console.warn('Nenhum dado válido para o mapa de calor');
+        return;
+      }
+
+      const heatLayer = (L as any).heatLayer(formattedData, {
         radius: 25,
         blur: 15,
-        maxZoom: 10,
+        maxZoom: 17,
         gradient: {
-          0.4: 'blue',
-          0.6: 'cyan',
-          0.7: 'lime',
+          0.2: 'blue',
+          0.4: 'cyan', 
+          0.6: 'lime',
           0.8: 'yellow',
           1.0: 'red'
         }
-      }).addTo(this.map!);
+      });
+
+      heatLayer.addTo(this.map);
+      console.log('Mapa de calor criado com sucesso');
     } catch (error) {
       console.error('Erro ao criar mapa de calor:', error);
       this.criarMarcadoresAlternativos(heatData);
