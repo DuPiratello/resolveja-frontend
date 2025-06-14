@@ -22,13 +22,15 @@ export class HeatmapComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.loadHeatPlugin().then(() => {
-      this.heatLoaded = true;
-      this.carregarCoordenadas();
-    }).catch(() => {
-      console.warn('leaflet.heat não carregou, usarei marcadores.');
-      this.carregarCoordenadas();
-    });
+    this.loadHeatPlugin()
+      .then(() => {
+        this.heatLoaded = true;
+        this.carregarCoordenadas();
+      })
+      .catch(() => {
+        console.warn('leaflet.heat não carregou, usarei marcadores.');
+        this.carregarCoordenadas();
+      });
   }
 
   private initMap(): void {
@@ -37,26 +39,24 @@ export class HeatmapComponent implements AfterViewInit {
   }
 
   private loadHeatPlugin(): Promise<void> {
-    // Se já foi carregado, resolve imediatamente
-    if ((L as any).heatLayer) {
-      return Promise.resolve();
-    }
     return new Promise((resolve, reject) => {
+      // Se já foi carregado no global, resolve
+      if ((window as any).L?.heatLayer) {
+        resolve();
+        return;
+      }
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js';
       script.onload = () => {
         setTimeout(() => {
-          const globalL = (window as any).L;
-          if (globalL?.heatLayer) {
-            // Injeta no import L
-            (L as any).heatLayer = globalL.heatLayer;
+          if ((window as any).L?.heatLayer) {
             resolve();
           } else {
-            reject();
+            reject(new Error('heatLayer não encontrado após carregar script'));
           }
         }, 100);
       };
-      script.onerror = () => reject();
+      script.onerror = () => reject(new Error('Falha ao carregar leaflet.heat'));
       document.head.appendChild(script);
     });
   }
@@ -75,7 +75,7 @@ export class HeatmapComponent implements AfterViewInit {
 
   private criarVisualizacao(data: any[]): void {
     console.log('Dados recebidos:', data, 'heatLoaded:', this.heatLoaded);
-    if (this.heatLoaded && (L as any).heatLayer) {
+    if (this.heatLoaded && (window as any).L?.heatLayer) {
       this.criarMapaDeCalor(data);
     } else {
       this.criarMarcadores(data);
@@ -83,17 +83,18 @@ export class HeatmapComponent implements AfterViewInit {
   }
 
   private criarMapaDeCalor(raw: any[]): void {
+    if (!this.map) return;
     const points: [number, number, number][] = raw
       .map(p => {
         if (Array.isArray(p)) {
-          const lat = p[0] ?? null;
-          const lng = p[1] ?? null;
-          const intensity = p.length > 2 && p[2] != null ? p[2] : 0.5;
+          const lat = typeof p[0] === 'number' ? p[0] : 0;
+          const lng = typeof p[1] === 'number' ? p[1] : 0;
+          const intensity = typeof p[2] === 'number' ? p[2] : 0.5;
           return [lat, lng, intensity] as [number, number, number];
         } else {
-          const lat = p.latitude ?? p.lat ?? null;
-          const lng = p.longitude ?? p.lng ?? null;
-          const intensity = p.intensity ?? 0.5;
+          const lat = typeof p.latitude === 'number' ? p.latitude : (typeof p.lat === 'number' ? p.lat : 0);
+          const lng = typeof p.longitude === 'number' ? p.longitude : (typeof p.lng === 'number' ? p.lng : 0);
+          const intensity = typeof p.intensity === 'number' ? p.intensity : 0.5;
           return [lat, lng, intensity] as [number, number, number];
         }
       })
@@ -102,7 +103,8 @@ export class HeatmapComponent implements AfterViewInit {
       console.warn('Nenhum ponto válido para heatmap');
       return;
     }
-    (L as any).heatLayer(points, {
+    // Usa o heatLayer do objeto global L
+    (window as any).L.heatLayer(points, {
       radius: 25,
       blur: 15,
       maxZoom: 17,
@@ -111,6 +113,7 @@ export class HeatmapComponent implements AfterViewInit {
   }
 
   private criarMarcadores(raw: any[]): void {
+    if (!this.map) return;
     raw.forEach(p => {
       const lat = Array.isArray(p) ? p[0] : p.latitude || p.lat;
       const lng = Array.isArray(p) ? p[1] : p.longitude || p.lng;
