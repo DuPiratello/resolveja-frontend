@@ -1,9 +1,16 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
-import 'leaflet.heat/dist/leaflet-heat.js';
 import { DenunciaService } from '../../services/denuncia.service';
 
-console.log('heatLayer existe?', (L as any).heatLayer);
+// Importação explícita do leaflet.heat
+  declare let require: any;
+  let leafletHeat: any;
+  try {
+    leafletHeat = require('leaflet.heat');
+  } catch (e) {
+    console.error('Erro ao carregar leaflet.heat:', e);
+  }
+
 @Component({
   selector: 'app-heatmap',
   templateUrl: './heatmap.component.html',
