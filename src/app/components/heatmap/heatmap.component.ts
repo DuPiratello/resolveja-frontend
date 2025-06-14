@@ -1,8 +1,9 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
-import 'leaflet.heat';
+import 'leaflet.heat/dist/leaflet-heat.js';
 import { DenunciaService } from '../../services/denuncia.service';
 
+console.log('heatLayer existe?', (L as any).heatLayer);
 @Component({
   selector: 'app-heatmap',
   templateUrl: './heatmap.component.html',
