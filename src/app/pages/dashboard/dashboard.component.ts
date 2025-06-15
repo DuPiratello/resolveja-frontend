@@ -66,6 +66,11 @@ export class DashboardComponent implements OnInit {
     );
   }
   
+    get taxaResolucao(): number {
+      if (!this.denuncias || this.denuncias.length === 0) return 0;
+      return Math.round((this.denunciasResolvidas.length / this.denuncias.length) * 100);
+    }
+
   atualizarStatus(novoStatus: string) {
     if (!this.selectedDenuncia) return;
     const denunciaAtualizada = { ...this.selectedDenuncia, status: novoStatus };
