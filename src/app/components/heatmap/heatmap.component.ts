@@ -110,10 +110,10 @@ export class HeatmapComponent implements AfterViewInit {
       maxZoom: 17,
       gradient: { 
         0.0: 'blue', 
-        0.4: 'cyan', 
-        0.6: 'lime', 
-        0.8: 'yellow', 
-        1.0: 'red' }
+        0.2: 'cyan', 
+        0.4: 'lime', 
+        0.6: 'yellow', 
+        0.8: 'red' }
     }).addTo(this.map);
   }
 
