@@ -108,7 +108,12 @@ export class HeatmapComponent implements AfterViewInit {
       radius: 25,
       blur: 15,
       maxZoom: 17,
-      gradient: { 0.2: 'blue', 0.4: 'cyan', 0.6: 'lime', 0.8: 'yellow', 1.0: 'red' }
+      gradient: { 
+        0.0: 'blue', 
+        0.4: 'cyan', 
+        0.6: 'lime', 
+        0.8: 'yellow', 
+        1.0: 'red' }
     }).addTo(this.map);
   }
 
